@@ -9,9 +9,8 @@
 "                                          /_/un
 "
 "
-" @author 闲耘™ (@hotoo, mail@xianyun.org)
-"               (http://www.xianyun.org/)
-" @version 2009/09/10
+"                                   闲耘™ (@hotoo)
+"                             hotoo.cn[AT]gmail.com
 "
 " +---------------------------------Oooo-----------+
 "
