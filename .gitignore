@@ -1,8 +1,9 @@
 .svn
 .DS_Store
 .VimballRecord
-Thumb.db
 sysrc.vim
+Desktop.ini
+Thumb.db
 calendar_data/*
 vimfiles/view/*
 addons/*
