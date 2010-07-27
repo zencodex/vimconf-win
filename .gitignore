@@ -2,6 +2,7 @@
 .DS_Store
 .VimballRecord
 Thumb.db
+sysrc.vim
 calendar_data/*
 vimfiles/view/*
 addons/*

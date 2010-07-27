@@ -635,27 +635,6 @@ let g:vimwiki_use_mouse = 1
 let g:vimwiki_camel_case = 0
 let g:vimwiki_CJK_length = 1
 let g:vimwiki_use_calendar = 0
-let g:vimwiki_list = [{'path': 'D:\My Dropbox\VimPrivateWiki'},
-                    \ {
-                        \ 'path'        : 'D:\My Dropbox\vimwiki',
-                        \ 'path_html'   : 'D:\hotoo\vimwiki',
-                        \ 'html_header' : 'D:\My Dropbox\vimwiki\template\header.tpl',
-                        \ 'html_footer' : 'D:\My Dropbox\vimwiki\template\footer.tpl'
-                    \ },
-                    \ {
-                        \ 'path'        : 'D:\workbench\vim-script-cn\intro-wiki',
-                        \ 'path_html'   : 'D:\workbench\vim-script-cn\intro',
-                        \ 'html_header' : 'D:\workbench\vim-script-cn\intro-wiki\template\header.tpl',
-                        \ 'html_footer' : 'D:\workbench\vim-script-cn\intro-wiki\template\footer.tpl'
-                    \ },
-                    \ {
-                        \ 'path'        : 'D:\My Dropbox\blog',
-                        \ 'path_html'   : 'D:\hotoo\blog',
-                        \ 'html_header' : 'D:\My Dropbox\blog\template\header.tpl',
-                        \ 'html_footer' : 'D:\My Dropbox\blog\template\footer.tpl'
-                    \ }
-                    \ ]
-
 
 " Auto Complete Pop Menu
 " autocomplpop.vim
@@ -716,13 +695,6 @@ let g:jslint_command = $VIM.'\vimfiles\jslint\jsl.exe'
 
 " Calendar
 " @see http://www.gracecode.com/archives/674/
-"let g:calendar_diary=$VIM.'\vimfiles\calendar_data\'
-let g:calendar_diary='D:\My Dropbox\diary'
-let g:calendar_diary_list = [
-    \   {'name': 'Works', 'path': 'D:\My Dropbox\diary\works', 'ext': 'task'},
-    \   {'name': 'Tasks', 'path': 'D:\My Dropbox\diary\tasks', 'ext': 'task'},
-    \   {'name': 'Diary', 'path': 'D:\My Dropbox\diarys\home', 'ext': 'diary'},
-    \ ]
 let g:calendar_smnd = 1
 let g:calendar_monday = 1                   " week start with monday.
 let g:calendar_weeknm = 1                   " don't work with g:calendar_diary
