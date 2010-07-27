@@ -17,12 +17,15 @@
 
 闲耘™'s Vim settings, plugins...
 
+
 +- vimrc
+    |
+    +- _vimrc           针对 Windows gvim 的配置文件，本质上
+    |                   是导入 vimrc，其他系统(.vimrc)也是如此，可以
+    |                   方便统一管理配置文件。
     |
     +- sysrc.vim        针对系统的特殊设置，比如 Vimwiki 的项目目录。
     |
     +- vimrc            统一管理的 Vim 设置信息。
     |
-    +- _vimrc           针对 Windows gvim 的配置文件，本质上
-                        是导入 vimrc，其他系统(.vimrc)也是如此，可以
-                        方便统一管理配置文件。
+    +- tmp              用来存储临时文件的目录，请手工创建。
