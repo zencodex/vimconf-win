@@ -104,7 +104,7 @@ if has('win32')
     au GUIEnter * simalt ~x
 
     au! bufwritepost hosts !start cmd /C ipconfig /flushdns<cr>
-    command -nargs=0 Vimrc :tabnew $VIM/vimfiles/vimrc
+    command -nargs=0 Vimrc :tabnew $VIM/vimrc
     " @see http://practice.chatserve.com/hosts.html
     command -nargs=0 Hosts :tabnew c:\windows\system32\drivers\etc\hosts
 else
@@ -146,15 +146,15 @@ if has("win32")
 endif
 
 " auto mkview and loadview.
-au BufWinLeave *.js mkview
-au BufWinEnter *.js silent loadview
+au BufWinLeave *.js,*.css mkview
+au BufWinEnter *.js,*.css silent loadview
 
 
 " swrap file, auto backup.
-" :set backup
 set nobackup
 set directory=$VIM\tmp
 
+" 加速光标闪烁。
 " @see http://c9s.blogspot.com/2007/12/gvim.html
 "set guicursor+=n-v-c:block-cursor-blinkwait300-blinkon90-blinkoff90
 "set guicursor+=i:block-cursor-blinkwait200-blinkon110-blinkoff110
@@ -162,34 +162,25 @@ set directory=$VIM\tmp
 
 " Tabs
 set softtabstop=4
-" replace tab to word space.
-set expandtab
-" show tab indent word space.
-set tabstop=4
-" tab length
-set shiftwidth=4
+set expandtab       " replace tab to whitespace.
+set tabstop=4       " show tab indent word space.
+set shiftwidth=4    " tab length
 
-" break full word.
-set linebreak
-" new line indent same this line.
-set autoindent
+
+set linebreak       " break full word.
+set autoindent      " new line indent same this line.
 set smartindent
 
-set smartcase
 
 
-" fold
-"set foldmethod=indent
+" Folds.
 set foldmethod=syntax
 set foldlevel=6
-set fdc=2
+set foldcolumn=0
 
-" set ignorecase
-set ic
-
-" display line number.
-" <code>:set nonu</code> hide line number.
-set nu
+set ignorecase
+set smartcase
+set number
 
 " 设置宽度不明的文字(如 “”①②→ )为双宽度文本。
 " @see http://blog.sina.com.cn/s/blog_46dac66f010006db.html
@@ -654,7 +645,7 @@ autocmd FileType * let g:AutoComplPop_CompleteOption = '.,w,b,u,t,i'
 autocmd FileType javascript let g:AutoComplPop_CompleteOption = '.,w,b,u,t,i,k$VIM/vimfiles/dict/javascript.dict'
 "autocmd FileType erlang let g:AutoComplPop_CompleteOption = '.,w,b,u,t,i,k~/.vim/dict/erlang.dict'
 
-autocmd FileType javascript set dictionary=$VIM/vimfiles/dict/javascript.dict
+autocmd FileType javascript set dictionary=$VIM/vimfiles/dict/javascript.dict,$VIM/vimfiles/dict/jQuery.dict,$VIM/vimfiles/dict/jQuery.dict
 "autocmd FileType javascript set omnifunc=javascriptcomplete#CompleteJS
 
 
