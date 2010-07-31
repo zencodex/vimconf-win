@@ -4,6 +4,7 @@
 " @see http://vim.sourceforge.net/scripts/script.php?script_id=515
 " @see http://amix.dk/vim/vimrc.html
 
+finish
 
 function! Folding()
     setl foldmethod=syntax

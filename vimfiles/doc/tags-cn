@@ -1780,6 +1780,7 @@ $VIMRUNTIME	starting.cnx	/*$VIMRUNTIME*
 :VimwikiAll2HTML	vimwiki.cnx	/*:VimwikiAll2HTML*
 :VimwikiDeleteWord	vimwiki.cnx	/*:VimwikiDeleteWord*
 :VimwikiFollowWord	vimwiki.cnx	/*:VimwikiFollowWord*
+:VimwikiGenerateLinks	vimwiki.cnx	/*:VimwikiGenerateLinks*
 :VimwikiGoBackWord	vimwiki.cnx	/*:VimwikiGoBackWord*
 :VimwikiGoHome	vimwiki.cnx	/*:VimwikiGoHome*
 :VimwikiMakeDiaryNote	vimwiki.cnx	/*:VimwikiMakeDiaryNote*
@@ -1791,6 +1792,8 @@ $VIMRUNTIME	starting.cnx	/*$VIMRUNTIME*
 :VimwikiTabGoHome	vimwiki.cnx	/*:VimwikiTabGoHome*
 :VimwikiTabMakeDiaryNote	vimwiki.cnx	/*:VimwikiTabMakeDiaryNote*
 :VimwikiTable	vimwiki.cnx	/*:VimwikiTable*
+:VimwikiTableMoveColumnLeft	vimwiki.cnx	/*:VimwikiTableMoveColumnLeft*
+:VimwikiTableMoveColumnRight	vimwiki.cnx	/*:VimwikiTableMoveColumnRight*
 :VimwikiToggleListItem	vimwiki.cnx	/*:VimwikiToggleListItem*
 :VimwikiUISelect	vimwiki.cnx	/*:VimwikiUISelect*
 :VimwikiVSplitWord	vimwiki.cnx	/*:VimwikiVSplitWord*
@@ -5688,16 +5691,20 @@ g:vimsyn_folding	syntax.cnx	/*g:vimsyn_folding*
 g:vimsyn_maxlines	syntax.cnx	/*g:vimsyn_maxlines*
 g:vimsyn_minlines	syntax.cnx	/*g:vimsyn_minlines*
 g:vimsyn_noerror	syntax.cnx	/*g:vimsyn_noerror*
+g:vimwiki_CJK_length	vimwiki.cnx	/*g:vimwiki_CJK_length*
 g:vimwiki_auto_checkbox	vimwiki.cnx	/*g:vimwiki_auto_checkbox*
 g:vimwiki_badsyms	vimwiki.cnx	/*g:vimwiki_badsyms*
 g:vimwiki_browsers	vimwiki.cnx	/*g:vimwiki_browsers*
 g:vimwiki_camel_case	vimwiki.cnx	/*g:vimwiki_camel_case*
+g:vimwiki_dir_link	vimwiki.cnx	/*g:vimwiki_dir_link*
 g:vimwiki_fold_lists	vimwiki.cnx	/*g:vimwiki_fold_lists*
 g:vimwiki_fold_trailing_empty_lines	vimwiki.cnx	/*g:vimwiki_fold_trailing_empty_lines*
 g:vimwiki_folding	vimwiki.cnx	/*g:vimwiki_folding*
 g:vimwiki_global_ext	vimwiki.cnx	/*g:vimwiki_global_ext*
 g:vimwiki_hl_cb_checked	vimwiki.cnx	/*g:vimwiki_hl_cb_checked*
 g:vimwiki_hl_headers	vimwiki.cnx	/*g:vimwiki_hl_headers*
+g:vimwiki_html_header_numbering	vimwiki.cnx	/*g:vimwiki_html_header_numbering*
+g:vimwiki_html_header_numbering_sym	vimwiki.cnx	/*g:vimwiki_html_header_numbering_sym*
 g:vimwiki_list	vimwiki.cnx	/*g:vimwiki_list*
 g:vimwiki_list_ignore_newline	vimwiki.cnx	/*g:vimwiki_list_ignore_newline*
 g:vimwiki_listsyms	vimwiki.cnx	/*g:vimwiki_listsyms*
@@ -8154,11 +8161,11 @@ vimrc-option-example	starting.cnx	/*vimrc-option-example*
 vimrc_example.vim	usr_05.cnx	/*vimrc_example.vim*
 vimtutor	usr_01.cnx	/*vimtutor*
 vimwiki	vimwiki.cnx	/*vimwiki*
-vimwiki-author	vimwiki.cnx	/*vimwiki-author*
 vimwiki-calendar	vimwiki.cnx	/*vimwiki-calendar*
 vimwiki-changelog	vimwiki.cnx	/*vimwiki-changelog*
 vimwiki-commands	vimwiki.cnx	/*vimwiki-commands*
 vimwiki-contents	vimwiki.cnx	/*vimwiki-contents*
+vimwiki-developers	vimwiki.cnx	/*vimwiki-developers*
 vimwiki-diary	vimwiki.cnx	/*vimwiki-diary*
 vimwiki-folding	vimwiki.cnx	/*vimwiki-folding*
 vimwiki-global-commands	vimwiki.cnx	/*vimwiki-global-commands*
@@ -8169,6 +8176,7 @@ vimwiki-local-commands	vimwiki.cnx	/*vimwiki-local-commands*
 vimwiki-local-mappings	vimwiki.cnx	/*vimwiki-local-mappings*
 vimwiki-mappings	vimwiki.cnx	/*vimwiki-mappings*
 vimwiki-multiple-wikies	vimwiki.cnx	/*vimwiki-multiple-wikies*
+vimwiki-nohtml	vimwiki.cnx	/*vimwiki-nohtml*
 vimwiki-option-auto_export	vimwiki.cnx	/*vimwiki-option-auto_export*
 vimwiki-option-css_name	vimwiki.cnx	/*vimwiki-option-css_name*
 vimwiki-option-diary_header	vimwiki.cnx	/*vimwiki-option-diary_header*
@@ -8207,6 +8215,8 @@ vimwiki-toc	vimwiki.cnx	/*vimwiki-toc*
 vimwiki-todo-lists	vimwiki.cnx	/*vimwiki-todo-lists*
 vimwiki.txt	vimwiki.cnx	/*vimwiki.txt*
 vimwiki_-	vimwiki.cnx	/*vimwiki_-*
+vimwiki_<A-Left>	vimwiki.cnx	/*vimwiki_<A-Left>*
+vimwiki_<A-Right>	vimwiki.cnx	/*vimwiki_<A-Right>*
 vimwiki_<Backspace>	vimwiki.cnx	/*vimwiki_<Backspace>*
 vimwiki_<C-CR>	vimwiki.cnx	/*vimwiki_<C-CR>*
 vimwiki_<C-Space>	vimwiki.cnx	/*vimwiki_<C-Space>*
@@ -8220,6 +8230,7 @@ vimwiki_=	vimwiki.cnx	/*vimwiki_=*
 vimwiki_gqq	vimwiki.cnx	/*vimwiki_gqq*
 vimwiki_gww	vimwiki.cnx	/*vimwiki_gww*
 vimwiki_i_<CR>	vimwiki.cnx	/*vimwiki_i_<CR>*
+vimwiki_i_<S-CR>	vimwiki.cnx	/*vimwiki_i_<S-CR>*
 vimwiki_i_<Tab>	vimwiki.cnx	/*vimwiki_i_<Tab>*
 virtcol()	eval.cnx	/*virtcol()*
 visual-block	visual.cnx	/*visual-block*

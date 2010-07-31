@@ -32,8 +32,8 @@ hi Cursor	guibg=khaki guifg=slategrey
 "hi DiffText
 "hi ErrorMsg
 hi VertSplit	guibg=#c2bfa5 guifg=grey50 gui=none
-"hi Folded	guibg=grey30 guifg=gold
-hi Folded	guibg=#444444 guifg=#888888
+hi Folded	guibg=grey30 guifg=gold
+"hi Folded	guibg=#444444 guifg=#888888
 hi FoldColumn	guibg=grey30 guifg=tan
 hi IncSearch	guifg=slategrey guibg=khaki
 hi LineNr guibg=#555555
