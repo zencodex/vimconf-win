@@ -48,6 +48,40 @@ snippet backspace
 snippet escape
 	&#x238B;
 # Template
+snippet html
+	<!DOCTYPE html>
+	<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh-CN" lang="zh-CN">
+	<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=${1:UTF-8}" />
+	<meta name="keywords" content="" />
+	<meta name="description" content="" />
+	<meta name="generator" content="gvim" />
+	<meta name="author" content="闲耘™ (hotoo.cn[AT]gmail.com)" />
+	<link rel="icon" href="favicon.ico" type="image/x-icon" />
+	<link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+	<title>${2:`substitute(Filename('', 'Page Title'), '^.', '\u&', '')`}</title>
+	</head>
+	<body>
+	${3}
+	</body>
+	</html>
+snippet temp
+	<!DOCTYPE html>
+	<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh-CN" lang="zh-CN">
+	<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=${1:UTF-8}" />
+	<meta name="keywords" content="" />
+	<meta name="description" content="" />
+	<meta name="generator" content="gvim" />
+	<meta name="author" content="闲耘™ (hotoo.cn[AT]gmail.com)" />
+	<link rel="icon" href="favicon.ico" type="image/x-icon" />
+	<link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+	<title>${2:`substitute(Filename('', 'Page Title'), '^.', '\u&', '')`}</title>
+	</head>
+	<body>
+	${3}
+	</body>
+	</html>
 snippet template
 	<!DOCTYPE html>
 	<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh-CN" lang="zh-CN">
@@ -56,13 +90,13 @@ snippet template
 	<meta name="keywords" content="" />
 	<meta name="description" content="" />
 	<meta name="generator" content="gvim" />
-	<meta name="author" content="闲耘 (mail[AT]xianyun.org)" />
+	<meta name="author" content="闲耘™ (hotoo.cn[AT]gmail.com)" />
 	<link rel="icon" href="favicon.ico" type="image/x-icon" />
 	<link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
-	<title>${2:`substitute(Filename('', 'Page Title'), '^.', '\u&', '')`}</title>${3}
+	<title>${2:`substitute(Filename('', 'Page Title'), '^.', '\u&', '')`}</title>
 	</head>
 	<body>
-	${4}
+	${3}
 	</body>
 	</html>
 # Generic Doctype
@@ -113,10 +147,6 @@ snippet docxt
 snippet docx
 	<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
 	"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
-snippet html
-	<html>
-	${1}
-	</html>
 snippet xhtml
 	<html xmlns="http://www.w3.org/1999/xhtml">
 	${1}
