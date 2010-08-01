@@ -336,6 +336,9 @@ function! FileExplorer(path)
     else
         let p = a:path
     endif
+    if has("win32") && exists("+shellslash") && &shellslash
+        let p = substitute(p, "/", "\\", "g")
+    endif
 
     if executable("chcp")
         let code_page = 'cp' . matchstr(system("chcp"), "\\d\\+")
