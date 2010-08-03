@@ -21,7 +21,7 @@ endfunction "}}}
 function! s:desc(d1, d2) "{{{
   return a:d1 == a:d2 ? 0 : a:d1 < a:d2 ? 1 : -1
 endfunction "}}}
-
+    
 function! s:get_date_link(fmt) "{{{
   return strftime(a:fmt)
 endfunction "}}}
@@ -51,7 +51,7 @@ function! s:get_diary_range(lines, header) "{{{
   let ln_start = -1
   let ln_end = -1
   for line in a:lines
-    if ln_start != -1
+    if ln_start != -1 
       if line =~ '^\s*\(=\)\+.*\1\s*$' || (line !~ rx && line !~ '^\s*$')
         break
       endif
@@ -62,7 +62,7 @@ function! s:get_diary_range(lines, header) "{{{
     let idx += 1
   endfor
 
-  let ln_end = idx - 1
+  let ln_end = idx
   return [ln_start, ln_end]
 endfunction "}}}
 
@@ -94,7 +94,7 @@ function! s:get_links() "{{{
 
   " remove backup files (.wiki~)
   call filter(links, 'v:val !~ ''.*\~$''')
-
+  
   " remove paths
   call map(links, 'fnamemodify(v:val, ":t")')
 
@@ -137,6 +137,7 @@ function! s:add_link(page, header, link) "{{{
     if ln_start == -1
       call insert(lines, '= '.a:header.' =')
       let ln_start = 1
+      let ln_end = 1
     endif
 
     " removing 'old' links
@@ -145,10 +146,10 @@ function! s:add_link(page, header, link) "{{{
       call remove(lines, ln_start)
       let idx -= 1
     endwhile
-
+    
     " get all diary links from filesystem
     let links = s:get_links()
-
+    
     " add current link
     if index(links, link) == -1
       call add(links, link)

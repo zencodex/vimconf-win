@@ -21,6 +21,11 @@ let b:undo_ftplugin = "setlocal ".
 
 setlocal autowriteall
 setlocal commentstring=<!--%s-->
+
+if g:vimwiki_conceallevel && exists("+conceallevel")
+  let &conceallevel = g:vimwiki_conceallevel
+endif
+
 " MISC }}}
 
 " GOTO FILE: gf {{{
@@ -38,32 +43,22 @@ else
 endif
 setlocal formatoptions=tnro
 
-inoremap <buffer> <expr> <CR> vimwiki_lst#insertCR()
-nnoremap <buffer> o :call vimwiki_lst#insertOo('o')<CR>a
-nnoremap <buffer> O :call vimwiki_lst#insertOo('O')<CR>a
-
 if !empty(&langmap)
   " Valid only if langmap is a comma separated pairs of chars
   let l_o = matchstr(&langmap, '\C,\zs.\zeo,')
   if l_o
-    exe 'nnoremap <buffer> '.l_o.' :call vimwiki_lst#insertOo("o")<CR>a'
+    exe 'nnoremap <buffer> '.l_o.' :call vimwiki_lst#kbd_oO("o")<CR>a'
   endif
 
   let l_O = matchstr(&langmap, '\C,\zs.\zeO,')
   if l_O
-    exe 'nnoremap <buffer> '.l_O.' :call vimwiki_lst#insertOo("O")<CR>a'
+    exe 'nnoremap <buffer> '.l_O.' :call vimwiki_lst#kbd_oO("O")<CR>a'
   endif
 endif
 
 " COMMENTS }}}
 
 " FOLDING for headers and list items using expr fold method. {{{
-if g:vimwiki_folding == 1
-  setlocal fdm=expr
-  setlocal foldexpr=VimwikiFoldLevel(v:lnum)
-  setlocal foldtext=VimwikiFoldText()
-endif
-
 function! VimwikiFoldLevel(lnum) "{{{
   let line = getline(a:lnum)
 
@@ -86,7 +81,7 @@ function! VimwikiFoldLevel(lnum) "{{{
   " List item folding...
   if g:vimwiki_fold_lists
     let base_level = s:get_base_level(a:lnum)
-
+    
     let rx_list_item = '\('.
           \ g:vimwiki_rxListBullet.'\|'.g:vimwiki_rxListNumber.
           \ '\)'
@@ -97,7 +92,7 @@ function! VimwikiFoldLevel(lnum) "{{{
       let level = s:get_li_level(a:lnum)
       let leveln = s:get_li_level(nnum)
       let adj = s:get_li_level(s:get_start_list(rx_list_item, a:lnum))
-
+      
       if leveln > level
         return ">".(base_level+leveln-adj)
       else
@@ -194,7 +189,7 @@ function! s:get_start_list(rx_item, lnum) "{{{
 endfunction "}}}
 
 function! VimwikiFoldText() "{{{
-  let line = substitute(getline(v:foldstart), '\t',
+  let line = substitute(getline(v:foldstart), '\t', 
         \ repeat(' ', &tabstop), 'g')
   return line.' ['.(v:foldend - v:foldstart).']'
 endfunction "}}}
@@ -305,10 +300,24 @@ noremap <silent><script><buffer>
       \ <Plug>VimwikiToggleListItem :VimwikiToggleListItem<CR>
 
 
+function! s:CR() "{{{
+  let res = vimwiki_lst#kbd_cr()
+  if res == "\<CR>" && g:vimwiki_table_auto_fmt
+    let res = vimwiki_tbl#kbd_cr()
+  endif
+  return res
+endfunction "}}}
+
+" List and Table <CR> mapping
+inoremap <buffer> <expr> <CR> <SID>CR()
+
+" List mappings
+nnoremap <buffer> o :call vimwiki_lst#kbd_oO('o')<CR>a
+nnoremap <buffer> O :call vimwiki_lst#kbd_oO('O')<CR>a
+
 " Table mappings
 if g:vimwiki_table_auto_fmt
-  inoremap <expr> <buffer> <CR> vimwiki_tbl#kbd_cr()
-  inoremap <expr> <buffer> <C-Tab> vimwiki_tbl#kbd_tab()
+  inoremap <expr> <buffer> <Tab> vimwiki_tbl#kbd_tab()
   inoremap <expr> <buffer> <S-Tab> vimwiki_tbl#kbd_shift_tab()
 endif
 
