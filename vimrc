@@ -146,8 +146,10 @@ if has("win32")
 endif
 
 " auto mkview and loadview.
-au BufWinLeave *.js,*.css mkview
-au BufWinEnter *.js,*.css silent loadview
+au BufWinLeave *.js mkview
+au BufWinEnter *.js silent loadview
+au BufWinLeave *.css mkview
+au BufWinEnter *.css silent loadview
 
 
 " swrap file, auto backup.
@@ -195,6 +197,8 @@ set ambiwidth=double
 " set cursorcolumn
 set cursorline
 hi cursorline gui=underline guibg=NONE cterm=underline
+
+set history=500
 
 " Show tab number in your tab line
 " @see http://vim.wikia.com/wiki/Show_tab_number_in_your_tab_line
@@ -330,6 +334,11 @@ map <C-S-kPlus> <C-w>_
 map <C-S-kMinus> <C-w>_
 
 
+" Windows: Explorer.exe
+" Linux:   nautilus $PWD
+"          nautilus .
+" Mac:     open .
+" @see http://www.zhuoqun.net/html/y2010/1516.html
 function! FileExplorer(path)
     if a:path == ""
         let p = expand("%:p")
@@ -373,7 +382,7 @@ endif
 " @see http://vimcdoc.sourceforge.net/doc/tabpage.html
 " Note: cannot map <C-number> for gvim on window 7.
 imap <C-t> <Esc>:tabnew<cr>
-"nmap <C-t> :tabnew<cr> " back tag history
+nmap <C-t> :tabnew<cr>
 "imap <C-w> <Esc>:tabclose<cr> " window shortcut key.
 "nmap <C-w> :tableclose<cr>
 "imap <C-S-w> <Esc>:tabonly<cr>
@@ -638,15 +647,20 @@ let g:vimwiki_use_calendar = 0
 let g:acp_behaviorSnipmateLength = 1        " AutoComplete snippets for snipMate.
 let g:AutoComplPop_MappingDriven = 1        " Don't popup when move cursor.
 let g:AutoComplPop_IgnoreCaseOption = 1
-if exists('+shellslash')
-    set shellslash                          " FileNameComplete by slash(/)
-endif
 " @see http://d.hatena.ne.jp/cooldaemon/20071114/1195029893
 autocmd FileType * let g:AutoComplPop_CompleteOption = '.,w,b,u,t,i'
 "autocmd FileType perl let g:AutoComplPop_CompleteOption = '.,w,b,u,t,k~/.vim/dict/perl.dict'
 "autocmd FileType ruby let g:AutoComplPop_CompleteOption = '.,w,b,u,t,i,k~/.vim/dict/ruby.dict'
 autocmd FileType javascript let g:AutoComplPop_CompleteOption = '.,w,b,u,t,i,k$VIM/vimfiles/dict/javascript.dict'
 "autocmd FileType erlang let g:AutoComplPop_CompleteOption = '.,w,b,u,t,i,k~/.vim/dict/erlang.dict'
+
+
+" Just for AutoComplPop css url.
+" but more bugs in other place.
+"if exists('+shellslash')
+    "set shellslash                          " FileNameComplete by slash(/)
+"endif
+
 
 autocmd FileType javascript set dictionary=$VIM/vimfiles/dict/javascript.dict,$VIM/vimfiles/dict/jQuery.dict,$VIM/vimfiles/dict/jQuery.dict
 "autocmd FileType javascript set omnifunc=javascriptcomplete#CompleteJS
