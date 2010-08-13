@@ -383,7 +383,7 @@ let g:xmldata_html5 = {
 \ ],
 \ 'select': [
 \ ['optgroup', 'option'],
-\ { 'ondblclick': [], 'onkeydown': [], 'onchange': [], 'onkeyup': [], 'onmouseup': [], 'id': [], 'onmouseover': [], 'lang': [], 'name': [], 'onkeypress': [], 'onmousedown': [], 'class': [], 'title': [], 'onclick': [], 'disabled': ['disabled'], 'dir': ['ltr', 'rtl'], 'size': [], 'onblur': [], 'onfocus': [], 'tabindex': [], 'onmouseout': [], 'onmousemove': [], 'style': [], 'multiple': ['BOOL']}
+\ { 'ondblclick': [], 'onkeydown': [], 'onchange': [], 'onkeyup': [], 'onmouseup': [], 'id': [], 'onmouseover': [], 'lang': [], 'name': [], 'onkeypress': [], 'onmousedown': [], 'class': [], 'title': [], 'onclick': [], 'disabled': ['disabled'], 'dir': ['ltr', 'rtl'], 'size': [], 'onblur': [], 'onfocus': [], 'tabindex': [], 'onmouseout': [], 'onmousemove': [], 'style': [], 'multiple': ['multiple']}
 \ ],
 \ 'small': [
 \ ['tt', 'i', 'b', 'u', 's', 'strike', 'big', 'small', 'em', 'strong', 'dfn', 'code', 'samp', 'kbd', 'var', 'cite', 'abbr', 'acronym', 'a', 'img', 'applet', 'object', 'font', 'basefont', 'br', 'script', 'map', 'q', 'sub', 'sup', 'span', 'bdo', 'iframe', 'input', 'select', 'textarea', 'label', 'button'],
@@ -518,7 +518,7 @@ let g:xmldata_html5 = {
 \ 'maxlength' : ['Number', ''],
 \ 'media' : ['MediaDesc', ''],
 \ 'method' : ['String', ''],
-\ 'multiple' : ['Bool', ''],
+\ 'multiple' : ['String', ''],
 \ 'name' : ['CDATA', ''],
 \ 'nohref' : ['Bool', ''],
 \ 'onblur' : ['Script', ''],

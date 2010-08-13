@@ -235,7 +235,7 @@ let g:xmldata_xhtml10s = {
 \ ],
 \ 'select': [
 \ ['optgroup', 'option'],
-\ { 'ondblclick': [], 'onkeydown': [], 'onchange': [], 'onkeyup': [], 'onmouseup': [], 'id': [], 'onmouseover': [], 'lang': [], 'name': [], 'onkeypress': [], 'onmousedown': [], 'class': [], 'title': [], 'onclick': [], 'disabled': ['BOOL'], 'dir': ['ltr', 'rtl'], 'size': [], 'onblur': [], 'onfocus': [], 'tabindex': [], 'onmouseout': [], 'onmousemove': [], 'style': [], 'xml:lang': [], 'multiple': ['BOOL']}
+\ { 'ondblclick': [], 'onkeydown': [], 'onchange': [], 'onkeyup': [], 'onmouseup': [], 'id': [], 'onmouseover': [], 'lang': [], 'name': [], 'onkeypress': [], 'onmousedown': [], 'class': [], 'title': [], 'onclick': [], 'disabled': ['BOOL'], 'dir': ['ltr', 'rtl'], 'size': [], 'onblur': [], 'onfocus': [], 'tabindex': [], 'onmouseout': [], 'onmousemove': [], 'style': [], 'xml:lang': [], 'multiple': ['multiple']}
 \ ],
 \ 'small': [
 \ ['a', 'br', 'span', 'bdo', 'map', 'object', 'img', 'tt', 'i', 'b', 'big', 'small', 'em', 'strong', 'dfn', 'code', 'q', 'samp', 'kbd', 'var', 'cite', 'abbr', 'acronym', 'sub', 'sup', 'input', 'select', 'textarea', 'label', 'button', 'ins', 'del', 'script'],
@@ -350,7 +350,7 @@ let g:xmldata_xhtml10s = {
 \ 'maxlength' : ['Number', ''],
 \ 'media' : ['MediaDesc', ''],
 \ 'method' : ['String', ''],
-\ 'multiple' : ['Bool', ''],
+\ 'multiple' : ['String', ''],
 \ 'name' : ['CDATA', ''],
 \ 'nohref' : ['Bool', ''],
 \ 'onblur' : ['Script', ''],
