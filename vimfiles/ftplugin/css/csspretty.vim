@@ -99,8 +99,6 @@ function! CssPretty(...)
 
 			let declarations = []
 			for o in split(contents, ';')
-				" let property = Trim(split(o, ':')[0])
-				" let value = Trim(split(o, ':')[1])
                 let colonIndex = stridx(o, ':')
                 let property = Trim(strpart(o, 0, colonIndex))
                 let value = Trim(strpart(o, colonIndex+1))
@@ -160,7 +158,7 @@ function! CssPretty(...)
 
 endfunction
 
-if !exists(g:CssPrettyLeftBraceAtNewLine)
+if !exists("g:CssPrettyLeftBraceAtNewLine")
     let g:CssPrettyLeftBraceAtNewLine=0
 endif
 nmap <F1> :call CssPretty()<cr>
