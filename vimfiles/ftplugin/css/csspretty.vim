@@ -160,5 +160,7 @@ function! CssPretty(...)
 
 endfunction
 
-let g:CssPrettyLeftBraceAtNewLine=0
+if !exists(g:CssPrettyLeftBraceAtNewLine)
+    let g:CssPrettyLeftBraceAtNewLine=0
+endif
 nmap <F1> :call CssPretty()<cr>
