@@ -42,7 +42,7 @@ if !exists("g:calendar_datetime")
   let g:calendar_datetime = 'title'
 endif
 if !exists("g:calendar_list") && !exists("g:calendar_diary")
-    let g:calendar_list = [{'name': 'Diary', 'path': '~/diary', 'ext': 'diary'}]
+    let g:calendar_list = [{'name': 'Diary', 'path': '~/diary', 'ext': 'cal'}]
     if !exists("g:calendar_current_idx")
         let g:calendar_current_idx = 0
     endif
@@ -57,10 +57,10 @@ command! -nargs=* Calendar  call Calendar(0,<f-args>)
 command! -nargs=* CalendarH call Calendar(1,<f-args>)
 command! -nargs=0 Cal Calendar
 exe "command! -nargs=0 CalendarDiarys NERDTree " . g:calendar_diary
-exe "command! -nargs=* CalendarSearch vimgrep /<args>/".escape(g:calendar_diary," ")."**/*.cal|syntax on|cw"
+exe "command! -nargs=* CalendarSearch vimgrep /<args>/".escape(g:calendar_diary," ")."**/*.".g:calendar_list[g:calendar_current_idx]["ext"]."|syntax on|cw"
 "command! -nargs=* CalendarSearch call CalendarSearch(<f-args>)
 "function! CalendarSearch(...)
-    "exe "vimgrep /" . a:1 . "/" . escape(g:calendar_diary, " ") . "**/*.cal"
+    "exe "vimgrep /" . a:1 . "/" . escape(g:calendar_diary, " ") . "**/*.".g:calendar_list[g:calendar_current_idx]["ext"]
     "syntax off
 "endfunction
 autocmd filetype calendar nmap <buffer> <C-j> :call CalendarDiaryGoto("next")<cr>
@@ -135,7 +135,7 @@ function! CalendarDiaryGoto(...)
         let month = a:2
         let day = a:3
     endif
-    exe "edit " . g:calendar_diary . "/" . year . "/" . month . "/" . day . ".cal"
+    exe "edit ".g:calendar_diary."/".year."/".month."/".day.".".g:calendar_list[g:calendar_current_idx]["ext"]
 endfunction
 
 function! NumberOfWeek(year,month,day)
@@ -944,7 +944,7 @@ function! Calendar(...)
     " Without this, the 'sidescrolloff' setting may cause the left side of the
     " calendar to disappear if the last inserted element is near the right
     " window border.
-    setlocal wrap
+    setlocal nowrap
     setlocal norightleft
     setlocal foldcolumn=0
     setlocal modifiable
@@ -1125,7 +1125,7 @@ function! s:CalendarDiary(day, month, year, week, dir)
       return
     endif
   endif
-  let sfile = expand(sfile) . "/" . a:day . ".cal"
+  let sfile = expand(sfile)."/".a:day.".".g:calendar_list[g:calendar_current_idx]["ext"]
   let sfile = substitute(sfile, ' ', '\\ ', 'g')
   let vbufnr = bufnr('__Calendar')
 
@@ -1145,7 +1145,7 @@ function! s:CalendarDiary(day, month, year, week, dir)
     endif
   endif
 
-  setlocal ft=calendar
+  "setlocal ft=calendar
   let dir = getbufvar(vbufnr, "CalendarDir")
   let vyear = getbufvar(vbufnr, "CalendarYear")
   let vmnth = getbufvar(vbufnr, "CalendarMonth")
@@ -1160,7 +1160,7 @@ endfunc
 "*   year  : year of sign
 "*****************************************************************
 function! s:CalendarSign(day, month, year)
-  let sfile = g:calendar_diary."/".a:year."/".a:month."/".a:day.".cal"
+  let sfile = g:calendar_diary."/".a:year."/".a:month."/".a:day.".".g:calendar_list[g:calendar_current_idx]["ext"]
   return filereadable(expand(sfile))
 endfunction
 
