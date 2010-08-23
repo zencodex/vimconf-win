@@ -41,13 +41,17 @@ if !exists("g:calendar_datetime")
  \&& g:calendar_datetime != 'statusline')
   let g:calendar_datetime = 'title'
 endif
+
+if !exists("g:calendar_current_idx")
+    let g:calendar_current_idx = 0
+endif
 if !exists("g:calendar_list") && !exists("g:calendar_diary")
-    let g:calendar_list = [{'name': 'Diary', 'path': '~/diary', 'ext': 'cal'}]
-    if !exists("g:calendar_current_idx")
-        let g:calendar_current_idx = 0
-    endif
+    let g:calendar_diary = '~/diary'
+    let g:calendar_list = [{'name': 'Diary', 'path': g:calendar_diary, 'ext': 'cal'}]
 elseif !exists("g:calendar_diary")
-    let g:calendar_diary = "~/diary"
+    let g:calendar_diary = g:calendar_list[g:calendar_current_idx].path
+elseif !exists("g:calendar_list")
+    let g:calendar_list = [{'name': 'Diary', 'path': g:calendar_diary, 'ext': 'cal'}]
 endif
 
 "*****************************************************************
