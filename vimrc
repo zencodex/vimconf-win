@@ -311,8 +311,14 @@ function! CompleteQuote(quote)
 endfunction
 
 " <Space> key in normal model.
-nmap <Space> i <Esc>l
-
+"nmap <Space> i <Esc>l                  " bugs with autocomplpop.
+nmap <space> :call NormalSpace()<cr>
+function! NormalSpace()
+    let col=col(".")-1
+    let text=getline(".")
+    call setline(line("."), strpart(text,0,col)." ".strpart(text,col))
+    exec "normal l"
+endfunction
 
 " Change Assignment(=) Expression.
 " @see http://c9s.blogspot.com/2007/09/vim-tip.html
