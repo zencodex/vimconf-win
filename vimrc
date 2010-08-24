@@ -153,6 +153,7 @@ set nobackup
 set directory=$VIM\tmp
 
 let MRU_File = $VIM.'\_vim_mru_files'
+let MRU_Max_Entries = 1000
 
 
 set undofile
