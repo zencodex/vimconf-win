@@ -188,7 +188,7 @@ set foldcolumn=0
 set ignorecase
 set smartcase
 set number
-set colorcolumn=80
+set colorcolumn=81
 
 " 设置宽度不明的文字(如 “”①②→ )为双宽度文本。
 " @see http://blog.sina.com.cn/s/blog_46dac66f010006db.html
