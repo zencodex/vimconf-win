@@ -7,4 +7,7 @@ Thumb.db
 calendar_data/*
 vimfiles/view/*
 tmp/*
+undodir/*
 mru-list.txt
+vim72/*
+_vim_mru_files

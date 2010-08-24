@@ -50,10 +50,6 @@ endfunction
 
 " @see http://vim.wikia.com/wiki/Selecting_changes_in_diff_mode
 if &diff
-    let g:origCursorPos=getpos('.')
-    autocmd WinEnter * :call setpos('.', g:origCursorPos)
-    autocmd WinLeave * :let g:origCursorPos=getpos('.')
-    "call InitSyncDiffCursor()
     nmap <F7> [c
     nmap <F8> ]c
 else
@@ -156,6 +152,14 @@ au BufWinEnter *.css silent loadview
 set nobackup
 set directory=$VIM\tmp
 
+let MRU_File = $VIM.'\_vim_mru_files'
+
+
+set undofile
+set undolevels=1000
+set undodir=$VIM\undodir
+au BufWritePre undodir/* setlocal noundofile
+
 " 加速光标闪烁。
 " @see http://c9s.blogspot.com/2007/12/gvim.html
 "set guicursor+=n-v-c:block-cursor-blinkwait300-blinkon90-blinkoff90
@@ -183,6 +187,7 @@ set foldcolumn=0
 set ignorecase
 set smartcase
 set number
+set colorcolumn=80
 
 " 设置宽度不明的文字(如 “”①②→ )为双宽度文本。
 " @see http://blog.sina.com.cn/s/blog_46dac66f010006db.html
@@ -237,8 +242,8 @@ hi User3 guibg=#C2BFA5 guifg=#999999
 " Normal Mode, Visual Mode, and Select Mode,
 " use <Tab> and <Shift-Tab> to indent
 " @see http://c9s.blogspot.com/2007/10/vim-tips.html
-nmap <tab> v>
-nmap <s-tab> v<
+"nmap <tab> v>                  " :h ctrl-i :h <tab>
+"nmap <s-tab> v<
 vmap <tab> >gv
 vmap <s-tab> <gv
 
@@ -306,8 +311,14 @@ function! CompleteQuote(quote)
 endfunction
 
 " <Space> key in normal model.
-nmap <Space> i <Esc>l
-
+"nmap <Space> i <Esc>l                  " bugs with autocomplpop.
+nmap <space> :call NormalSpace()<cr>
+function! NormalSpace()
+    let col=col(".")-1
+    let text=getline(".")
+    call setline(line("."), strpart(text,0,col)." ".strpart(text,col))
+    exec "normal l"
+endfunction
 
 " Change Assignment(=) Expression.
 " @see http://c9s.blogspot.com/2007/09/vim-tip.html
