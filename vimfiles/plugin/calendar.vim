@@ -309,7 +309,7 @@ endfunction
 "*****************************************************************
 "* CalendarDoAction : call the action handler function
 "*----------------------------------------------------------------
-"*****************************************************************
+"**************************************************************{{{
 function! s:CalendarDoAction(...)
     " for switch calendar list.
     let text = getline(".")
@@ -440,7 +440,46 @@ function! s:CalendarDoAction(...)
   endif
   " call the action function
   exe "call " . g:calendar_action . "(day, month, year, week, dir)"
-endfunc
+endfunc "}}}
+
+function! CalendarOpenFile(path)
+    " load the file
+    if winnr('#') == 0
+        if a:dir == "V"
+            exe "vsplit " . a:path
+        else
+            exe "split " . a:path
+        endif
+    else
+        wincmd p
+        if !&hidden && &modified
+            exe "new " . a:path
+        else
+            exe "edit " . a:path
+        endif
+    endif
+endfunction
+
+function! s:CalendarOpen()
+    let text = getline(".")
+    if text =~ "^([Oo ])"
+        let list_idx = 0
+        let curl = line(".") - 1
+        while curl>1
+            if getline(curl) =~ "^([Oo ])"
+                let list_idx += 1
+                let curl -= 1
+            else
+                let g:calendar_current_idx = list_idx
+                let g:calendar_diary = g:calendar_list[list_idx].path
+                let ext = g:calendar_list[list_idx].ext
+                call Calendar(b:CalendarDir, b:CalendarYear, b:CalendarMonth)
+                call CalendarOpenFile(g:calendar_diary."/index.".ext)
+                return
+            endif
+        endwhile
+    endif
+endfunction
 
 "*****************************************************************
 "* Calendar : build calendar
@@ -1189,6 +1228,7 @@ function! s:CalendarBuildKeymap(dir, vyear, vmnth)
 
   execute 'nnoremap <silent> <buffer> <Plug>CalendarDoAction  :call <SID>CalendarDoAction()<cr>'
   execute 'nnoremap <silent> <buffer> <Plug>CalendarDoAction  :call <SID>CalendarDoAction()<cr>'
+  execute 'nnoremap <silent> <buffer> <Plug>CalendarOpen      :call <SID>CalendarOpen()<cr>'
   execute 'nnoremap <silent> <buffer> <Plug>CalendarGotoToday :call Calendar(b:CalendarDir)<cr>'
   execute 'nnoremap <silent> <buffer> <Plug>CalendarShowHelp  :call <SID>CalendarHelp()<cr>'
   execute 'nnoremap <silent> <buffer> <Plug>CalendarReDisplay :call Calendar(' . a:dir . ',' . a:vyear . ',' . (a:vmnth-2) . ')<cr>'
@@ -1204,6 +1244,7 @@ function! s:CalendarBuildKeymap(dir, vyear, vmnth)
   nmap <buffer> t             <Plug>CalendarGotoToday
   nmap <buffer> ?             <Plug>CalendarShowHelp
   nmap <buffer> r             <Plug>CalendarReDisplay
+  nmap <buffer> o             <Plug>CalendarOpen
 
   nmap <buffer> <Left>  <Plug>CalendarGotoPrevMonth
   nmap <buffer> <Right> <Plug>CalendarGotoNextMonth
