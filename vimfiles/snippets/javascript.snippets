@@ -114,12 +114,12 @@ snippet enc encodeURI
 snippet enc encodeURIComponent
 	encodeURIComponent(${1})
 snippet log
-	if(window.console){console.log(${1});}
+	if(window.console && window.console.log){window.console.log(${1});}
 snippet debug
-	if(window.console){console.debug(${1});}
+	if(window.console && window.console.debug){window.console.debug(${1});}
 snippet info
-	if(window.console){console.info(${1});}
+	if(window.console && window.console.info){window.console.info(${1});}
 snippet warn
-	if(window.console){console.warn(${1});}
+	if(window.console && window.console.warn){window.console.warn(${1});}
 snippet err
-	if(window.console){console.error(${1});}
+	if(window.console && window.console.error){window.console.error(${1});}
