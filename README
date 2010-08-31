@@ -9,7 +9,6 @@
                                           /_/un
 
 
-
                                     闲耘™(@hotoo)
                              hotoo.cn[AT]gmail.com
 
@@ -28,6 +27,10 @@
     |
     +- vimrc            统一管理的 Vim 设置信息。
     |
+    +- addons           一些外部工具。
+    |
     +- tmp              用来存储临时文件的目录，请手工创建。
+    |
+    +- undodir          存储持久化撤销文件的目录，请手工创建。
     |
     +- _vim_mru_files   MRU.vim 保存的列表问题，如果没有请手工创建。

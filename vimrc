@@ -269,7 +269,15 @@ function! OpenPair(char)
                 \ '(' : ')',
                 \ '<' : '>'
                 \}
-    let line = getline('.')
+    if line('$')>2000
+        let line = getline('.')
+    else
+        let lines = getline(1,line('$'))
+        let line = ""
+        for str in lines
+            let line = line . str . "\n"
+        endfor
+    endif
     let oL = len(split(line, a:char, 1))-1
     let cL = len(split(line, PAIRs[a:char], 1))-1
 
