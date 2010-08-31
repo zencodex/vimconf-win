@@ -48,10 +48,82 @@ function MyDiff()
   silent execute '!' . cmd . ' ' . opt . arg1 . ' ' . arg2 . ' > ' . arg3 . eq
 endfunction
 
+function! Jump2PrevDiffText()
+    let line=line(".")
+    let idx=col(".")-1
+    if synIDattr(diff_hlID(line, idx), "name")=="DiffChange" || synIDattr(diff_hlID(line, idx), "name")=="DiffText"
+        while idx>0
+            if synIDattr(diff_hlID(line, idx), "name")=="DiffText" && synIDattr(diff_hlID(line, idx-1), "name")!="DiffText"
+                call setpos(".", [0,line,idx])
+                break
+            elseif idx==1
+                let line=line(".")
+                let cols=col(".")
+                exec "normal [c"
+                if line==line(".") && cols==col(".")
+                    return
+                elseif synIDattr(diff_hlID(".", 1), "name")=="DiffChange" || synIDattr(diff_hlID(".", 1), "name")=="DiffText"
+                    call setpos(".", [0,line("."),col("$")-1])
+                    call Jump2PrevDiffText()
+                endif
+                break
+            else
+                let idx = idx-1
+            endif
+        endwhile
+    else
+        let line=line(".")
+        let cols=col(".")
+        exec "normal [c"
+        if line==line(".") && cols==col(".")
+            return
+        elseif synIDattr(diff_hlID(".", 1), "name")=="DiffChange" || synIDattr(diff_hlID(".", 1), "name")=="DiffText"
+            call setpos(".", [0,line("."),col("$")-1])
+            call Jump2PrevDiffText()
+        endif
+    endif
+endfunction
+function! Jump2NextDiffText()
+    if synIDattr(diff_hlID(".", col(".")), "name")=="DiffChange" || synIDattr(diff_hlID(".", col(".")), "name")=="DiffText"
+        let line=line(".")
+        let cols=col("$")-1
+        let idx=col(".")+1
+        while idx<=cols
+            if synIDattr(diff_hlID(line, idx), "name")=="DiffText" && synIDattr(diff_hlID(line,idx-1), "name")!="DiffText"
+                call setpos(".", [0,line,idx])
+                echo line.",".idx.",".cols
+                break
+            elseif idx==cols
+                let line=line(".")
+                let cols=col(".")
+                exec "normal ]c"
+                if line==line(".") && cols==col(".")
+                    return
+                elseif synIDattr(diff_hlID(".", 1), "name")=="DiffChange" || synIDattr(diff_hlID(".", 1), "name")=="DiffText"
+                    echoerr "inner"
+                    call Jump2NextDiffText()
+                endif
+                break
+            else
+                let idx = idx+1
+            endif
+        endwhile
+    else
+        let line=line(".")
+        let cols=col(".")
+        exec "normal ]c"
+        if line==line(".") && cols==col(".")
+            return
+        elseif synIDattr(diff_hlID(".", 1), "name")=="DiffChange" || synIDattr(diff_hlID(".", 1), "name")=="DiffText"
+            call Jump2NextDiffText()
+        endif
+    endif
+endfunction
+
 " @see http://vim.wikia.com/wiki/Selecting_changes_in_diff_mode
 if &diff
-    nmap <F7> [c
-    nmap <F8> ]c
+    nmap <F7> :call Jump2PrevDiffText()<cr>
+    nmap <F8> :call Jump2NextDiffText()<cr>
 else
     map <F7> :cp<cr>
     map <F8> :cn<cr>
