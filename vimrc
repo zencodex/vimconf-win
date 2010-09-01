@@ -91,7 +91,6 @@ function! Jump2NextDiffText()
         while idx<=cols
             if synIDattr(diff_hlID(line, idx), "name")=="DiffText" && synIDattr(diff_hlID(line,idx-1), "name")!="DiffText"
                 call setpos(".", [0,line,idx])
-                echo line.",".idx.",".cols
                 break
             elseif idx==cols
                 let line=line(".")
@@ -100,7 +99,6 @@ function! Jump2NextDiffText()
                 if line==line(".") && cols==col(".")
                     return
                 elseif synIDattr(diff_hlID(".", 1), "name")=="DiffChange" || synIDattr(diff_hlID(".", 1), "name")=="DiffText"
-                    echoerr "inner"
                     call Jump2NextDiffText()
                 endif
                 break
