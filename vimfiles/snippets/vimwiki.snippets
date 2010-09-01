@@ -12,10 +12,12 @@ snippet vimscript
 	== 安装细节 ==
 	${8}
 snippet blog
+	%title $1
+
 	= ${1:title} =
 	${2:content}
 
-	 blog:datetime=${3:`strftime("%Y/%m/%d %H:%M:%S")`}:tags=${4}
+	 blog:datetime=`strftime("%Y/%m/%d %H:%M:%S")`:tags=${3}
 snippet code
 	{{{class="${1:code}"
 	${2}
