@@ -2002,7 +2002,10 @@ au BufNewFile,BufRead *.tak			setf tak
 
 " Task
 au BufRead,BufNewFile {pending,completed,undo}.data  setf taskdata
-au BufRead,BufNewFile *.task                    setf taskedit
+"au BufRead,BufNewFile *.task                    setf taskedit
+
+" TaskList for calendar plugin.(@hotoo)
+au BufRead,BufNewFile *.task                    setf task
 
 " Tcl (JACL too)
 au BufNewFile,BufRead *.tcl,*.tk,*.itcl,*.itk,*.jacl	setf tcl
