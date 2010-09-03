@@ -44,6 +44,25 @@ endfunction "}}}
 nnoremap <buffer> o :call <SID>kbd_oO('o')<CR>a
 nnoremap <buffer> O :call <SID>kbd_oO('O')<CR>a
 
+function! s:ToggleImportant()
+    let line=getline(".")
+    if line =~ '^\s*[*#-]!\[.\]\s'
+        call setline(".", substitute(line, "!", " ", ""))
+    else
+        call setline(".", substitute(line, '^\(\s*[*#-]\)[~ ]', '\1!', ""))
+    endif
+endfunction
+function! s:ToggleMinor()
+    let line=getline(".")
+    if line =~ '^\s*[*#-]\~\[.\]\s'
+        call setline(".", substitute(line, '\~', " ", ""))
+    else
+        call setline(".", substitute(line, '^\(\s*[*#-]\)[! ]', '\1\~', ""))
+    endif
+endfunction
+nnoremap <buffer> ! :call <SID>ToggleImportant()<cr>
+nnoremap <buffer> ~ :call <SID>ToggleMinor()<cr>
+
 
 nmap = :call TaskAddTitle()<cr>
 nmap - :call TaskDelTitle()<cr>
