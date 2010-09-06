@@ -212,10 +212,12 @@ if has("win32")
 endif
 
 " auto mkview and loadview.
-au BufWinLeave *.js mkview
-au BufWinEnter *.js silent loadview
-au BufWinLeave *.css mkview
-au BufWinEnter *.css silent loadview
+if &diff
+    au BufWinLeave *.js mkview
+    au BufWinEnter *.js silent loadview
+    au BufWinLeave *.css mkview
+    au BufWinEnter *.css silent loadview
+endif
 
 
 " swrap file, auto backup.
