@@ -284,8 +284,9 @@ set guitablabel=%N.%t
 " NOTE: this setting will change text source.
 " set textwidth=80
 " set fo+=m
-syn match out80 /\%80v./ containedin=ALL
-hi out80 guifg=#333333 guibg=#ffffff
+
+"syn match out80 /\%80v./ containedin=ALL
+"hi out80 guifg=#333333 guibg=#ffffff
 
 
 " share system clipboard.
