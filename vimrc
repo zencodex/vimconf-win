@@ -286,8 +286,9 @@ set guitablabel=%N.%t
 " NOTE: this setting will change text source.
 " set textwidth=80
 " set fo+=m
-syn match out80 /\%80v./ containedin=ALL
-hi out80 guifg=#333333 guibg=#ffffff
+
+"syn match out80 /\%80v./ containedin=ALL
+"hi out80 guifg=#333333 guibg=#ffffff
 
 
 " share system clipboard.
@@ -361,17 +362,24 @@ function! OpenPair(char)
                 \}
     if line('$')>2000
         let line = getline('.')
+
+        let txt = strpart(line, col('.')-1)
     else
         let lines = getline(1,line('$'))
-        let line = ""
+        let line=""
         for str in lines
             let line = line . str . "\n"
+        endfor
+
+        let blines = getline(line('.')-1, line("$"))
+        let txt = strpart(getline("."), col('.')-1)
+        for str in blines
+            let txt = txt . str . "\n"
         endfor
     endif
     let oL = len(split(line, a:char, 1))-1
     let cL = len(split(line, PAIRs[a:char], 1))-1
 
-    let txt = strpart(line, col('.')-1)
     let ol = len(split(txt, a:char, 1))-1
     let cl = len(split(txt, PAIRs[a:char], 1))-1
 

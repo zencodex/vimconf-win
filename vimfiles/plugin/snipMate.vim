@@ -245,6 +245,7 @@ fun! ShowAvailableSnips()
 	return ''
 endf
 
+  " for autocomplpop.vim
   fun! GetSnipsInCurrentScope()
     let snips = {}
     for scope in [bufnr('%')] + split(&ft, '\.') + ['_']
