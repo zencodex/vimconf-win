@@ -742,7 +742,7 @@ let g:vimwiki_use_calendar = 0
 " @see http://hi.baidu.com/timeless/blog/item/cb4478f09a1563ca7931aa5d.html
 " Note: functions and key maps invalid.
 "
-let g:acp_behaviorSnipmateLength = 1        " AutoComplete snippets for snipMate.
+"let g:acp_behaviorSnipmateLength = 1        " AutoComplete snippets for snipMate.
 let g:AutoComplPop_MappingDriven = 1        " Don't popup when move cursor.
 let g:AutoComplPop_IgnoreCaseOption = 1
 " @see http://d.hatena.ne.jp/cooldaemon/20071114/1195029893
