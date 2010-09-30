@@ -212,10 +212,12 @@ if has("win32")
 endif
 
 " auto mkview and loadview.
-au BufWinLeave *.js mkview
-au BufWinEnter *.js silent loadview
-au BufWinLeave *.css mkview
-au BufWinEnter *.css silent loadview
+if &diff
+    au BufWinLeave *.js mkview
+    au BufWinEnter *.js silent loadview
+    au BufWinLeave *.css mkview
+    au BufWinEnter *.css silent loadview
+endif
 
 
 " swrap file, auto backup.
@@ -319,6 +321,24 @@ hi User3 guibg=#C2BFA5 guifg=#999999
 vmap <tab> >gv
 vmap <s-tab> <gv
 
+" join more lines without space in chinese.
+" some like 'gJ', but ignore invalid space.
+function! Join()
+    let cur = getpos(".")
+    let start = line(".")
+    let end = start + v:count1
+    let txt = getline(start)
+    let line = start+1
+    let len = strlen(txt)
+    while line<=end
+        let txt = txt . getline(line)
+        let line = line+1
+    endwhile
+    call setline(".", txt)
+    exec 'normal j"_'.(v:count1).'ddk'
+    "let lines = v:count>2 ? v:count : 2
+endfunction
+"nmap J :<C-U>call Join()<cr>
 
 " 选中一段文字并全文搜索这段文字
 vnoremap  *  y/<C-R>=escape(@", '\\/.*$^~[]')<CR><CR>
@@ -397,14 +417,13 @@ function! CompleteQuote(quote)
     endif
 endfunction
 
-" <Space> key in normal model.
-"nmap <Space> i <Esc>l                  " bugs with autocomplpop.
-nmap <space> :call NormalSpace()<cr>
+" [count]<Space> key in normal model.
+nmap <space> :<C-U>call NormalSpace()<cr>
 function! NormalSpace()
     let col=col(".")-1
     let text=getline(".")
-    call setline(line("."), strpart(text,0,col)." ".strpart(text,col))
-    exec "normal l"
+    call setline(line("."), strpart(text,0,col).repeat(" ", v:count1).strpart(text,col))
+    exec "normal ".v:count1."l"
 endfunction
 
 " Change Assignment(=) Expression.
@@ -759,6 +778,7 @@ autocmd FileType javascript let g:AutoComplPop_CompleteOption = '.,w,b,u,t,i,k$V
     "set shellslash                          " FileNameComplete by slash(/)
 "endif
 
+"autocmd FileType php set omnifunc=phpcomplete#CompletePHP
 
 autocmd FileType javascript set dictionary=$VIM/vimfiles/dict/javascript.dict,$VIM/vimfiles/dict/jQuery.dict,$VIM/vimfiles/dict/jQuery.dict
 "autocmd FileType javascript set omnifunc=javascriptcomplete#CompleteJS
