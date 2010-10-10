@@ -233,6 +233,8 @@ set undolevels=1000
 set undodir=$VIM\undodir
 au BufWritePre undodir/* setlocal noundofile
 
+set autochdir
+
 " 加速光标闪烁。
 " @see http://c9s.blogspot.com/2007/12/gvim.html
 "set guicursor+=n-v-c:block-cursor-blinkwait300-blinkon90-blinkoff90
@@ -321,24 +323,32 @@ hi User3 guibg=#C2BFA5 guifg=#999999
 vmap <tab> >gv
 vmap <s-tab> <gv
 
+" TODO:
 " join more lines without space in chinese.
 " some like 'gJ', but ignore invalid space.
-function! Join()
+function! JoinPlus()
     let cur = getpos(".")
-    let start = line(".")
-    let end = start + v:count1
-    let txt = getline(start)
-    let line = start+1
+    let startLine = line(".")
+    let offset = v:count1>2 ? v:count1 - 1 : 1
+    let endLine = startLine + offset
+    let reEmpty = "^\s*$"
+    let reStart = "[^ \t]"
+    let reEnd = "[a-zA-Z0-9][ \t]*$"
+    let reLetter = ""
+    let text = getline(startLine)
+    if(0!=match(text, reEmpty))
+        let text = strpart(text, 0, match(text, reEnd))
+    endif
     let len = strlen(txt)
-    while line<=end
-        let txt = txt . getline(line)
-        let line = line+1
+    let lineIdx = startLine+1
+    while lineIdx<=endLine
+        let txt = txt . getline(lineIdx)
+        let lineIdx = lineIdx+1
     endwhile
     call setline(".", txt)
-    exec 'normal j"_'.(v:count1).'ddk'
-    "let lines = v:count>2 ? v:count : 2
+    exec 'normal j"_'.offset.'ddk'
 endfunction
-"nmap J :<C-U>call Join()<cr>
+nmap J :<C-U>call JoinPlus()<cr>
 
 " 选中一段文字并全文搜索这段文字
 vnoremap  *  y/<C-R>=escape(@", '\\/.*$^~[]')<CR><CR>
