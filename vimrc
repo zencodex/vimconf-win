@@ -15,7 +15,6 @@
 " +---------------------------------Oooo-----------+
 "
 " @see http://vim.wikia.com/wiki/Version_Control_for_Vimfiles
-" vim:fdm=marker
 
 set nocompatible
 source $VIMRUNTIME/vimrc_example.vim
@@ -212,7 +211,7 @@ if has("win32")
 endif
 
 " auto mkview and loadview.
-if &diff
+if !&diff
     au BufWinLeave *.js mkview
     au BufWinEnter *.js silent loadview
     au BufWinLeave *.css mkview
@@ -308,10 +307,6 @@ hi User3 guibg=#C2BFA5 guifg=#999999
 "hi User1 cterm=italic ctermfg=blue
 "hi User2 cterm=bold
 
-
-" Set default mode:insert.
-"exe "startinsert"
-
 " }}}
 
 " ------------------------------- Mappings ------------------------------ {{{
@@ -335,9 +330,9 @@ function! JoinPlus()
     let reStart = "[^ \t]"
     let reEnd = "[a-zA-Z0-9][ \t]*$"
     let reLetter = ""
-    let text = getline(startLine)
-    if(0!=match(text, reEmpty))
-        let text = strpart(text, 0, match(text, reEnd))
+    let txt = getline(startLine)
+    if(0!=match(txt, reEmpty))
+        let txt = strpart(txt, 0, match(txt, reEnd))
     endif
     let len = strlen(txt)
     let lineIdx = startLine+1
@@ -348,7 +343,7 @@ function! JoinPlus()
     call setline(".", txt)
     exec 'normal j"_'.offset.'ddk'
 endfunction
-nmap J :<C-U>call JoinPlus()<cr>
+"nmap J :<C-U>call JoinPlus()<cr>
 
 " 选中一段文字并全文搜索这段文字
 vnoremap  *  y/<C-R>=escape(@", '\\/.*$^~[]')<CR><CR>
@@ -411,17 +406,23 @@ inoremap ' <c-r>=CompleteQuote("'")<CR>
 inoremap " <c-r>=CompleteQuote('"')<CR>
 function! CompleteQuote(quote)
     let ql = len(split(getline('.'), a:quote, 1))-1
-    " a:quote length is odd.
-    if (ql%2)==1
-        return a:quote
-    elseif getline('.')[col('.') - 1] == a:quote
-        return "\<Right>"
-    elseif '"'==a:quote && "vim"==&ft && 0==match(strpart(getline('.'), 0, col('.')-1), "^[\t ]*$")
+    let slen = len(split(strpart(getline("."), 0, col(".")-1), a:quote, 1))-1
+    let elen = len(split(strpart(getline("."), col(".")-1), a:quote, 1))-1
+    let isBefreQuote = getline('.')[col('.') - 1] == a:quote
+
+    if '"'==a:quote && "vim"==&ft && 0==match(strpart(getline('.'), 0, col('.')-1), "^[\t ]*$")
         " for vim comment.
         return a:quote
     elseif "'"==a:quote && 0==match(getline('.')[col('.')-2], "[a-zA-Z0-9]")
         " for Name's Blog.
         return a:quote
+    elseif (ql%2)==1
+        " a:quote length is odd.
+        return a:quote
+    elseif ((slen%2)==1 && (elen%2)==1 && !isBefreQuote) || ((slen%2)==0 && (elen%2)==0)
+        return a:quote . a:quote . "\<Left>"
+    elseif isBefreQuote
+        return "\<Right>"
     else
         return a:quote . a:quote . "\<Left>"
     endif
@@ -927,3 +928,5 @@ endfunction
 "cp -R doc $VIM.'\vimfiles\doc\'
 let helptags=$VIM.'\vimfiles\doc'
 set helplang=cn
+
+" vim:fdm=marker
