@@ -143,7 +143,6 @@ source $VIMRUNTIME/delmenu.vim
 source $VIMRUNTIME/menu.vim
 language messages zh_cn.utf-8
 
-
 filetype plugin on
 filetype indent on
 syntax on
@@ -262,6 +261,7 @@ set ignorecase
 set smartcase
 set number
 set colorcolumn=81
+hi ColorColumn guibg=#444444
 
 " 设置宽度不明的文字(如 “”①②→ )为双宽度文本。
 " @see http://blog.sina.com.cn/s/blog_46dac66f010006db.html
@@ -765,6 +765,7 @@ let g:vimwiki_use_mouse = 1
 let g:vimwiki_camel_case = 0
 let g:vimwiki_CJK_length = 1
 let g:vimwiki_use_calendar = 0
+let g:vimwiki_timestamp_format='%Y年%m月%d日 %H:%M:%S'
 
 " Auto Complete Pop Menu
 " autocomplpop.vim
@@ -790,6 +791,7 @@ autocmd FileType javascript let g:AutoComplPop_CompleteOption = '.,w,b,u,t,i,k$V
 "endif
 
 "autocmd FileType php set omnifunc=phpcomplete#CompletePHP
+"autocmd FileType velocity set omnifunc=velocitycomplete#CompleteTags
 
 autocmd FileType javascript set dictionary=$VIM/vimfiles/dict/javascript.dict,$VIM/vimfiles/dict/jQuery.dict,$VIM/vimfiles/dict/jQuery.dict
 "autocmd FileType javascript set omnifunc=javascriptcomplete#CompleteJS
