@@ -579,6 +579,8 @@ autocmd FileType dosbatch nmap <F5> :!%<cr><cr>
 
 autocmd FileType css syn region foldBraces start=/{/ end=/}/ transparent fold keepend extend
 
+au BufReadCmd   *.epub      call zip#Browse(expand("<amatch>"))
+
 " Javascript & CSS Compress.
 function JS_CSS_Compress()
     let cwd = expand('<afile>:p:h')
