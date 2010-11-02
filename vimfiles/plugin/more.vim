@@ -19,7 +19,7 @@ fun! AppendMoreText(...)
     call setpos(".", [0, line(".")+n, col(".")])
 endfunction
 
-inoremap <expr> `more JoinMoreText(1)
+"inoremap <expr> `more JoinMoreText(1)
 nmap <leader>more :<C-U>call AppendMoreText(v:count1)<cr>
 nmap `more :<C-U>call AppendMoreText(v:count1)<cr>
 command -nargs=? AppendMoreText :call AppendMoreText(<args>)
