@@ -133,7 +133,7 @@ function! s:get_html_header(title, subdir, charset) "{{{
   return lines
 endfunction "}}}
 
-function! s:get_html_footer() "{{{
+function! s:get_html_footer(path) "{{{
   let lines=[]
 
   if VimwikiGet('html_footer') != "" && !s:warn_html_footer
@@ -143,7 +143,7 @@ function! s:get_html_footer() "{{{
           if !exists('g:vimwiki_timestamp_format')
               let g:vimwiki_timestamp_format = '%Y-%m-%d %H:%M:%S'
           endif
-          call map(lines, 'substitute(v:val, "%time_stamp%", "'. strftime(g:vimwiki_timestamp_format) .'", "g")')
+          call map(lines, 'substitute(v:val, "%time_stamp%", "'. strftime(g:vimwiki_timestamp_format, getftime(a:path)) .'", "g")')
       endif
       return lines
     catch /E484/
@@ -178,8 +178,12 @@ function! s:safe_html(line) "{{{
 endfunction "}}}
 
 function! s:delete_html_files(path) "{{{
+  return
   let htmlfiles = split(glob(a:path.'**/*.html'), '\n')
   for fname in htmlfiles
+    "if fname == "search.html" || fname=="404.html"
+      "continue
+    "endif
     try
       call delete(fname)
     catch
@@ -1205,6 +1209,16 @@ function! vimwiki_html#Wiki2HTML(path, wikifile) "{{{
   let wikifile = fnamemodify(a:wikifile, ":p")
   let subdir = vimwiki#subdir(VimwikiGet('path'), wikifile)
 
+  let wiki_time = strftime('%Y%m%d%H%M%S', getftime(wikifile))
+  let htmlfile = VimwikiGet('path_html') . fnamemodify(a:wikifile, ":t:r") . ".html"
+  let html_time = strftime('%Y%m%d%H%M%S', getftime(htmlfile))
+  if wiki_time <= html_time
+    "echomsg wikifile . " is already up to date."
+    return
+  endif
+
+  echomsg 'Processing '.wikifile
+
   let lsource = s:remove_comments(readfile(wikifile))
   let ldest = []
 
@@ -1253,8 +1267,11 @@ function! vimwiki_html#Wiki2HTML(path, wikifile) "{{{
     call extend(ldest, lines)
   endfor
 
+  if !!nohtml
+    echomsg '  Ignored: '.wikifile
+    return
+  endif
 
-  if !nohtml
     let toc = s:get_html_toc(state.toc)
     call s:process_toc(ldest, placeholders, toc)
     call s:remove_blank_lines(ldest)
@@ -1272,12 +1289,11 @@ function! vimwiki_html#Wiki2HTML(path, wikifile) "{{{
 
     let title = s:process_title(placeholders, fnamemodify(a:wikifile, ":t:r"))
     call extend(ldest, s:get_html_header(title, subdir, &fileencoding), 0)
-    call extend(ldest, s:get_html_footer())
+    call extend(ldest, s:get_html_footer(a:wikifile))
 
     "" make html file.
     let wwFileNameOnly = fnamemodify(wikifile, ":t:r")
     call writefile(ldest, path.wwFileNameOnly.'.html')
-  endif
 endfunction "}}}
 
 function! vimwiki_html#WikiAll2HTML(path) "{{{
@@ -1297,8 +1313,8 @@ function! vimwiki_html#WikiAll2HTML(path) "{{{
   let path = expand(a:path)
   call vimwiki#mkdir(path)
 
-  echomsg 'Deleting old html files...'
-  call s:delete_html_files(path)
+  "echomsg 'Deleting old html files...'
+  "call s:delete_html_files(path)
 
   echomsg 'Converting wiki to html files...'
   let setting_more = &more
@@ -1306,7 +1322,6 @@ function! vimwiki_html#WikiAll2HTML(path) "{{{
 
   let wikifiles = split(glob(VimwikiGet('path').'**/*'.VimwikiGet('ext')), '\n')
   for wikifile in wikifiles
-    echomsg 'Processing '.wikifile
     call vimwiki_html#Wiki2HTML(path, wikifile)
   endfor
   call s:create_default_CSS(path)
