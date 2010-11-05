@@ -921,9 +921,39 @@ autocmd BufWritePre * call RemoveTrailingWhitespace()
 
 " get week day string in chinese.
 function! Week_cn()
-    return "星期".strpart("日一二三四五六", strftime("%w")*3, 3)
+    let len = strlen("日")
+    return "星期".strpart("日一二三四五六", strftime("%w")*len, len)
 endfunction
 
+
+func! Nr2Hex(nr)
+    let n = a:nr
+    let r = ""
+    while n
+        let r = '0123456789ABCDEF'[n % 16] . r
+        let n = n / 16
+    endwhile
+    return r
+endfunc
+" Character to Unicode Number.
+function! Char2hex(c)
+  if a:c =~# '^[:cntrl:]$' | return '' | endif
+  let r = ''
+  for i in range(strlen(a:c))
+    let r .= printf('%%%02X', char2nr(a:c[i]))
+  endfor
+  return r
+endfunction
+function! ToUnicode(str, ...)
+    let re = ""
+    let chars = split(a:str, '\zs')
+    let format = (a:0 == 2) ? a:2 : '%u${U}'
+    for char in chars
+        let re .= substitute(format, '${U}', Nr2Hex(char2nr(char)), '')
+    endfor
+    return re
+endfunction
+autocmd FileType css command! -range -nargs=0 ToUnicode <line1>,<line2>call ToUnicode(<f-args>, "\\${U}")
 " }}}
 
 " Chinese Docs
