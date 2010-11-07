@@ -197,11 +197,11 @@ endfunction "}}}
 " FOLDING }}}
 
 " COMMANDS {{{
-command! -buffer Vimwiki2HTML
+command! -buffer -bang Vimwiki2HTML
       \ call vimwiki_html#Wiki2HTML(expand(VimwikiGet('path_html')),
-      \                             expand('%'))
-command! -buffer VimwikiAll2HTML
-      \ call vimwiki_html#WikiAll2HTML(expand(VimwikiGet('path_html')))
+      \                             expand('%'), "<bang>")
+command! -buffer -bang VimwikiAll2HTML
+      \ call vimwiki_html#WikiAll2HTML(expand(VimwikiGet('path_html')), "<bang>")
 
 command! -buffer VimwikiNextLink call vimwiki#find_next_link()
 command! -buffer VimwikiPrevLink call vimwiki#find_prev_link()

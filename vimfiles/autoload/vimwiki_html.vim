@@ -5,6 +5,10 @@
 " Home: http://code.google.com/p/vimwiki/
 
 " XXX: This file should be refactored!
+" TODO: Check the don't exist links.
+" TODO: Delete html file for convert.
+" TODO: %template header2.tpl footer2.tpl
+" FIXME: http://code.google.com/p/vimwiki/issues/detail?id=119
 
 " Load only once {{{
 if exists("g:loaded_vimwiki_html_auto") || &cp
@@ -12,6 +16,12 @@ if exists("g:loaded_vimwiki_html_auto") || &cp
 endif
 let g:loaded_vimwiki_html_auto = 1
 "}}}
+
+if exists("g:vimwiki_user_html_list")
+  let g:vimwiki_user_html_list = "," . g:vimwiki_user_html_list . ","
+else
+  let g:vimwiki_user_html_list = ""
+endif
 
 " SCRIPT VARS "{{{
 " Warn if html header or html footer do not exist only once.
@@ -35,24 +45,27 @@ function! s:remove_blank_lines(lines) " {{{
 endfunction "}}}
 
 function! s:is_web_link(lnk) "{{{
-  if a:lnk =~ '^\%(https://\|http://\|www.\|ftp://\|file://\)'
-    return 1
-  endif
-  return 0
+  return a:lnk =~ '^\%(https://\|http://\|www.\|ftp://\|file://\)' ? 1 : 0
+  "if a:lnk =~ '^\%(https://\|http://\|www.\|ftp://\|file://\)'
+    "return 1
+  "endif
+  "return 0
 endfunction "}}}
 
 function! s:is_img_link(lnk) "{{{
-  if a:lnk =~ '\.\%(png\|jpg\|gif\|jpeg\)$'
-    return 1
-  endif
-  return 0
+  return a:lnk =~ '\.\%(png\|jpg\|gif\|jpeg\)$' ? 1 : 0
+  "if a:lnk =~ '\.\%(png\|jpg\|gif\|jpeg\)$'
+    "return 1
+  "endif
+  "return 0
 endfunction "}}}
 
 function! s:has_abs_path(fname) "{{{
-  if a:fname =~ '\(^.:\)\|\(^/\)'
-    return 1
-  endif
-  return 0
+  return a:fname =~ '\(^.:\)\|\(^/\)' ? 1 : 0
+  "if a:fname =~ '\(^.:\)\|\(^/\)'
+    "return 1
+  "endif
+  "return 0
 endfunction "}}}
 
 function! s:create_default_CSS(path) " {{{
@@ -178,14 +191,24 @@ function! s:safe_html(line) "{{{
 endfunction "}}}
 
 function! s:delete_html_files(path) "{{{
-  return
   let htmlfiles = split(glob(a:path.'**/*.html'), '\n')
+  let del_count = 0
   for fname in htmlfiles
-    "if fname == "search.html" || fname=="404.html"
-      "continue
-    "endif
+    " ignore user html files, e.g. search.html,404.html
+    if stridx(g:vimwiki_user_html_list, ",".fnamemodify(fname, ":t").",") >= 0
+      continue
+    endif
+    let wikifile = VimwikiGet("path") . fnamemodify(fname, ":t:r") . VimwikiGet("ext")
+    if filereadable(wikifile)
+      continue
+    endif
+    if del_count == 0
+      echomsg 'Deleting not exist html files...'
+    endif
+    let del_count += 1
     try
       call delete(fname)
+      echomsg "  ".del_count.". ".fname
     catch
       echomsg 'vimwiki: Cannot delete '.fname
     endtry
@@ -1199,7 +1222,7 @@ function! s:parse_line(line, state) " {{{
 
 endfunction " }}}
 
-function! vimwiki_html#Wiki2HTML(path, wikifile) "{{{
+function! vimwiki_html#Wiki2HTML(path, wikifile, bang) "{{{
 
   if !s:syntax_supported()
     echomsg 'vimwiki: Only vimwiki_default syntax supported!!!'
@@ -1212,12 +1235,9 @@ function! vimwiki_html#Wiki2HTML(path, wikifile) "{{{
   let wiki_time = strftime('%Y%m%d%H%M%S', getftime(wikifile))
   let htmlfile = VimwikiGet('path_html') . fnamemodify(a:wikifile, ":t:r") . ".html"
   let html_time = strftime('%Y%m%d%H%M%S', getftime(htmlfile))
-  if wiki_time <= html_time
-    "echomsg wikifile . " is already up to date."
+  if a:bang=="" && wiki_time <= html_time
     return
   endif
-
-  echomsg 'Processing '.wikifile
 
   let lsource = s:remove_comments(readfile(wikifile))
   let ldest = []
@@ -1268,9 +1288,9 @@ function! vimwiki_html#Wiki2HTML(path, wikifile) "{{{
   endfor
 
   if !!nohtml
-    echomsg '  Ignored: '.wikifile
     return
   endif
+  echomsg 'Processing '.wikifile
 
     let toc = s:get_html_toc(state.toc)
     call s:process_toc(ldest, placeholders, toc)
@@ -1296,13 +1316,13 @@ function! vimwiki_html#Wiki2HTML(path, wikifile) "{{{
     call writefile(ldest, path.wwFileNameOnly.'.html')
 endfunction "}}}
 
-function! vimwiki_html#WikiAll2HTML(path) "{{{
+function! vimwiki_html#WikiAll2HTML(path, bang) "{{{
   if !s:syntax_supported()
     echomsg 'vimwiki: Only vimwiki_default syntax supported!!!'
     return
   endif
 
-  echomsg 'Saving vimwiki files...'
+  "echomsg 'Saving vimwiki files...'
   let save_eventignore = &eventignore
   let &eventignore = "all"
   let cur_buf = bufname('%')
@@ -1313,8 +1333,7 @@ function! vimwiki_html#WikiAll2HTML(path) "{{{
   let path = expand(a:path)
   call vimwiki#mkdir(path)
 
-  "echomsg 'Deleting old html files...'
-  "call s:delete_html_files(path)
+  call s:delete_html_files(path)
 
   echomsg 'Converting wiki to html files...'
   let setting_more = &more
@@ -1322,7 +1341,7 @@ function! vimwiki_html#WikiAll2HTML(path) "{{{
 
   let wikifiles = split(glob(VimwikiGet('path').'**/*'.VimwikiGet('ext')), '\n')
   for wikifile in wikifiles
-    call vimwiki_html#Wiki2HTML(path, wikifile)
+    call vimwiki_html#Wiki2HTML(path, wikifile, a:bang)
   endfor
   call s:create_default_CSS(path)
   echomsg 'Done!'

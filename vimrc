@@ -768,6 +768,7 @@ let g:vimwiki_camel_case = 0
 let g:vimwiki_CJK_length = 1
 let g:vimwiki_use_calendar = 0
 let g:vimwiki_timestamp_format='%Y年%m月%d日 %H:%M:%S'
+let g:vimwiki_user_html_list = "search.html,404.html"
 
 " Auto Complete Pop Menu
 " autocomplpop.vim
