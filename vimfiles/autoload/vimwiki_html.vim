@@ -213,6 +213,7 @@ function! s:delete_html_files(path) "{{{
       echomsg 'vimwiki: Cannot delete '.fname
     endtry
   endfor
+  return del_count
 endfunction "}}}
 
 function! s:remove_comments(lines) "{{{
@@ -1226,7 +1227,7 @@ function! vimwiki_html#Wiki2HTML(path, wikifile, bang) "{{{
 
   if !s:syntax_supported()
     echomsg 'vimwiki: Only vimwiki_default syntax supported!!!'
-    return
+    return 0
   endif
 
   let wikifile = fnamemodify(a:wikifile, ":p")
@@ -1236,7 +1237,7 @@ function! vimwiki_html#Wiki2HTML(path, wikifile, bang) "{{{
   let htmlfile = VimwikiGet('path_html') . fnamemodify(a:wikifile, ":t:r") . ".html"
   let html_time = strftime('%Y%m%d%H%M%S', getftime(htmlfile))
   if a:bang=="" && wiki_time <= html_time
-    return
+    return 0
   endif
 
   let lsource = s:remove_comments(readfile(wikifile))
@@ -1288,9 +1289,9 @@ function! vimwiki_html#Wiki2HTML(path, wikifile, bang) "{{{
   endfor
 
   if !!nohtml
-    return
+    return 0
   endif
-  echomsg 'Processing '.wikifile
+  "echomsg '  Processing '.wikifile
 
     let toc = s:get_html_toc(state.toc)
     call s:process_toc(ldest, placeholders, toc)
@@ -1314,6 +1315,8 @@ function! vimwiki_html#Wiki2HTML(path, wikifile, bang) "{{{
     "" make html file.
     let wwFileNameOnly = fnamemodify(wikifile, ":t:r")
     call writefile(ldest, path.wwFileNameOnly.'.html')
+
+    return 1
 endfunction "}}}
 
 function! vimwiki_html#WikiAll2HTML(path, bang) "{{{
@@ -1322,29 +1325,39 @@ function! vimwiki_html#WikiAll2HTML(path, bang) "{{{
     return
   endif
 
+  if &modified
+    echohl ErrorMsg | echo "No write since last change." | echohl None
+    return
+  endif
   "echomsg 'Saving vimwiki files...'
-  let save_eventignore = &eventignore
-  let &eventignore = "all"
-  let cur_buf = bufname('%')
-  bufdo call s:save_vimwiki_buffer()
-  exe 'buffer '.cur_buf
-  let &eventignore = save_eventignore
+  "let save_eventignore = &eventignore
+  "let &eventignore = "all"
+  "let cur_buf = bufname('%')
+  " !Some problems here, like autowrite for buffers.
+  "bufdo call s:save_vimwiki_buffer()
+  "exe 'buffer '.cur_buf
+  "let &eventignore = save_eventignore
 
   let path = expand(a:path)
   call vimwiki#mkdir(path)
 
-  call s:delete_html_files(path)
+  let del_count = s:delete_html_files(path)
 
   echomsg 'Converting wiki to html files...'
   let setting_more = &more
   setlocal nomore
 
+  let build_count = 0
   let wikifiles = split(glob(VimwikiGet('path').'**/*'.VimwikiGet('ext')), '\n')
   for wikifile in wikifiles
-    call vimwiki_html#Wiki2HTML(path, wikifile, a:bang)
+    let cnt = vimwiki_html#Wiki2HTML(path, wikifile, a:bang)
+    if cnt==1
+      let build_count += 1
+      echomsg '  '.build_count.'. '.wikifile
+    endif
   endfor
   call s:create_default_CSS(path)
-  echomsg 'Done!'
+  echomsg 'Done!                                                         Delete('.del_count.'), Build('.build_count.')'
 
   let &more = setting_more
 endfunction "}}}
