@@ -205,7 +205,11 @@ endif
 " @see http://blog.xianyun.org/2009/09/14/vim-fonts.html
 if has("win32")
     set guifont=Courier_New:h11:cANSI
-    "set guifont=Lucida\ Console:h10:cANSI
+    "set guifont=monaco:h11:cANSI
+    "set guifont=Consola:h11:cANSI
+    "set guifont=DajaVu:h11:cANSI
+    "set guifont=Lucida\ Console:h11:cANSI
+
     "set guifontwide=YouYuan:h11:cGB2312
 endif
 
@@ -262,6 +266,9 @@ set smartcase
 set number
 set colorcolumn=81
 hi ColorColumn guibg=#444444
+" for Vim72-
+"syn match out80 /\%80v./ containedin=ALL
+"hi out80 guifg=#333333 guibg=#ffffff
 
 " 设置宽度不明的文字(如 “”①②→ )为双宽度文本。
 " @see http://blog.sina.com.cn/s/blog_46dac66f010006db.html
@@ -288,9 +295,6 @@ set guitablabel=%N.%t
 " set textwidth=80
 " set fo+=m
 
-"syn match out80 /\%80v./ containedin=ALL
-"hi out80 guifg=#333333 guibg=#ffffff
-
 
 " share system clipboard.
 "set clipboard+=unnamed
@@ -298,8 +302,7 @@ set guitablabel=%N.%t
 " User Defined Status Line.
 " @see http://www.vim.org/scripts/script.php?script_id=8 for VimBuddy.
 set laststatus=2
-set statusline=%t\ %1*%m%*\ %1*%r%*\ %2*%h%*%w%=\ [%l%3*/%L(%p%%)%*,%v]\ [%b:%B]\ [%{&ft==''?'TEXT':toupper(&ft)},%{toupper(&ff)},%{toupper(&fenc!=''?&fenc:&enc)}%{&bomb?',BOM':''}]
-"set statusline=%t\ %1*%m%*\ %1*%r%*\ %2*%h%*%w%=[%{VimBuddy()}]\ [%l%3*/%L(%p%%)%*,%v]\ [%b:%B]\ [%{&ft==''?'TEXT':toupper(&ft)},%{toupper(&ff)},%{toupper(&fenc!=''?&fenc:&enc)}%{&bomb?',BOM':''}]
+set statusline=%t\ %1*%m%*\ %1*%r%*\ %2*%h%*%w%=%{VimBuddy()}\ [%l%3*/%L(%p%%)%*,%c%V]\ [%b:0x%B]\ [%{&ft==''?'TEXT':toupper(&ft)},%{toupper(&ff)},%{toupper(&fenc!=''?&fenc:&enc)}%{&bomb?',BOM':''}%{&eol?'':',NOEOL'}]
 "let &statusline=' %t %{&mod?(&ro?"*":"+"):(&ro?"=":" ")} %1*|%* %{&ft==""?"any":&ft} %1*|%* %{&ff} %1*|%* %{(&fenc=="")?&enc:&fenc}%{(&bomb?",BOM":"")} %1*|%* %=%1*|%* 0x%B %1*|%* (%l,%c%V) %1*|%* %L %1*|%* %P'
 hi User1 guibg=red guifg=yellow
 hi User2 guibg=#008000 guifg=white
