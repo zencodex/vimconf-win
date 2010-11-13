@@ -19,17 +19,17 @@ endif
 
 setlocal indentexpr=TasksIndent()
 
-function! TasksIndent()"{{{
+function! TasksIndent() "{{{
     let l:line = getline('.')
-    let l:prev_line = (line('.') == 1)? '' : getline(line('.')-1)
+    let l:prev_line = (line('.') <= 1)? '' : getline(line('.')-1)
 
     if l:prev_line =~ '^\s*$'
         return 0
     else
         return match(l:line, '\S')
     endif
-endfunction"}}}
+endfunction "}}}
 
-let b:undo_indent .= '
-    \ | setlocal expandtab< shiftwidth< softtabstop<
-    \'
+"let b:undo_indent .= '
+    "\ | setlocal expandtab< shiftwidth< softtabstop<
+    "\'
