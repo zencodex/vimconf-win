@@ -46,26 +46,14 @@ endfunction "}}}
 
 function! s:is_web_link(lnk) "{{{
   return a:lnk =~ '^\%(https://\|http://\|www.\|ftp://\|file://\)' ? 1 : 0
-  "if a:lnk =~ '^\%(https://\|http://\|www.\|ftp://\|file://\)'
-    "return 1
-  "endif
-  "return 0
 endfunction "}}}
 
 function! s:is_img_link(lnk) "{{{
   return a:lnk =~ '\.\%(png\|jpg\|gif\|jpeg\)$' ? 1 : 0
-  "if a:lnk =~ '\.\%(png\|jpg\|gif\|jpeg\)$'
-    "return 1
-  "endif
-  "return 0
 endfunction "}}}
 
 function! s:has_abs_path(fname) "{{{
   return a:fname =~ '\(^.:\)\|\(^/\)' ? 1 : 0
-  "if a:fname =~ '\(^.:\)\|\(^/\)'
-    "return 1
-  "endif
-  "return 0
 endfunction "}}}
 
 function! s:create_default_CSS(path) " {{{
