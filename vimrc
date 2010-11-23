@@ -209,7 +209,6 @@ if has("win32")
     "set guifont=Consola:h11:cANSI
     "set guifont=DajaVu:h11:cANSI
     "set guifont=Lucida\ Console:h11:cANSI
-
     "set guifontwide=YouYuan:h11:cGB2312
 endif
 
@@ -295,7 +294,6 @@ set guitablabel=%N.%t
 " set textwidth=80
 " set fo+=m
 
-
 " share system clipboard.
 "set clipboard+=unnamed
 
@@ -311,6 +309,7 @@ hi User3 guibg=#C2BFA5 guifg=#999999
 "hi User2 cterm=bold
 
 " }}}
+
 
 " ------------------------------- Mappings ------------------------------ {{{
 " Normal Mode, Visual Mode, and Select Mode,

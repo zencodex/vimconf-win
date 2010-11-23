@@ -4,6 +4,8 @@ if exists("g:loaded_processing_omnicomplete")
 endif
 let g:loaded_processing_omnicomplete = 1
 
+let s:KEY_WORD = split("catch delay exit extends false final implements import loop new noLoop null popStyle provate public pushStyle redraw return static super this true  try cursor focused frameCount frameRate height noCursor online screen width boolean byte char color double float int long Array ArrayList HashMap Object String XMLElement binary unbinary hex unhex void setup draw background stroke noStroke size line ellipse")
+
 function! OmniProcessing(start,base)
     if a:start
         " locate the start of the word
@@ -16,7 +18,7 @@ function! OmniProcessing(start,base)
         return st
     else
         let res=[]
-        for m in split("catch delay exit extends false final implements import loop new noLoop null popStyle provate public pushStyle redraw return static super this true  try cursor focused frameCount frameRate height noCursor online screen width boolean byte char color double float int long Array ArrayList HashMap Object String XMLElement binary unbinary hex unhex void setup draw background stroke noStroke size line ellipse")
+        for m in s:KEY_WORD
             if m=~ '^'.a:base
                 call add(res, m)
             endif
