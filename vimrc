@@ -205,9 +205,10 @@ endif
 " @see http://blog.xianyun.org/2009/09/14/vim-fonts.html
 if has("win32")
     set guifont=Courier_New:h11:cANSI
-    "set guifont=Console:h10:cANSI
-    "set guifont=DajaVu:h10:cANSI
-    "set guifont=Lucida\ Console:h10:cANSI
+    "set guifont=monaco:h11:cANSI
+    "set guifont=Consola:h11:cANSI
+    "set guifont=DajaVu:h11:cANSI
+    "set guifont=Lucida\ Console:h11:cANSI
     "set guifontwide=YouYuan:h11:cGB2312
 endif
 
@@ -264,7 +265,7 @@ set smartcase
 set number
 set colorcolumn=81
 hi ColorColumn guibg=#444444
-" for vim72
+" for Vim72-
 "syn match out80 /\%80v./ containedin=ALL
 "hi out80 guifg=#333333 guibg=#ffffff
 

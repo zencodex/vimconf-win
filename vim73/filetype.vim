@@ -918,6 +918,9 @@ au BufNewFile,BufRead *.js,*.javascript,*.es,*.jsx	setf javascript
 
 au BufNewFile,BufRead *.json	setf json
 
+au BufNewFile,BufRead *.mxml set filetype=mxml
+au BufNewFile,BufRead *.as set filetype=actionscript
+
 " Java Server Pages
 au BufNewFile,BufRead *.jsp			setf jsp
 
