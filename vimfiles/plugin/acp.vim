@@ -32,10 +32,10 @@ function s:makeDefaultBehavior()
         \   'python' : [],
         \   'perl'   : [],
         \   'xml'    : [],
-        \   'html'   : [],
-        \   'xhtml'  : [],
         \   'css'    : [],
         \ }
+        "\   'html'   : [],
+        "\   'xhtml'  : [],
   "---------------------------------------------------------------------------
   if !empty(g:acp_behaviorUserDefinedFunction) &&
         \ !empty(g:acp_behaviorUserDefinedMeets)
@@ -99,17 +99,17 @@ function s:makeDefaultBehavior()
         \   'repeat'  : 1,
         \ })
   "---------------------------------------------------------------------------
-  call add(behavs.html, {
-        \   'command' : "\<C-x>\<C-o>",
-        \   'meets'   : 'acp#meetsForHtmlOmni',
-        \   'repeat'  : 1,
-        \ })
+  "call add(behavs.html, {
+        "\   'command' : "\<C-x>\<C-o>",
+        "\   'meets'   : 'acp#meetsForHtmlOmni',
+        "\   'repeat'  : 1,
+        "\ })
   "---------------------------------------------------------------------------
-  call add(behavs.xhtml, {
-        \   'command' : "\<C-x>\<C-o>",
-        \   'meets'   : 'acp#meetsForHtmlOmni',
-        \   'repeat'  : 1,
-        \ })
+  "call add(behavs.xhtml, {
+        "\   'command' : "\<C-x>\<C-o>",
+        "\   'meets'   : 'acp#meetsForHtmlOmni',
+        "\   'repeat'  : 1,
+        "\ })
   "---------------------------------------------------------------------------
   call add(behavs.css, {
         \   'command' : "\<C-x>\<C-o>",
