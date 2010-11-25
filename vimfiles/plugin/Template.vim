@@ -1,44 +1,43 @@
-" Version: $Id: Template.vim 199 2008-10-08 07:12:49Z i.feelinglucky $
-" File: Template.vim
-" Maintainer: feelinglucky<i.feeilnglucky#gmail.com>
-" Last Change: 2008/10/08
-" Desption: create new file form template
+" File: template.vim
+" Desption: autoload content from template file.
+" Author: 闲耘™(hotoo.cn[AT]gmail.com)
+" Last Change: 2010/11/25
 
-let g:TemplatePath=$VIM.'/vimfiles/template/'
-let g:TemplateCursorFlag='#cursor#'
 
-" {{{ Source
-function! NewTemplate(name, mode)
-    let Template=g:TemplatePath.a:name.'.tpl'
-
-    if !filereadable(Template)
-        echo "Template ".a:name.": not exists!"
-        return
-    endif
-
-    if a:mode == 'tab'
-        tabnew
-    else
-        new
-    endif
-
-    execute 'setlocal filetype='.a:name
-    let $Template=Template
-    0r $Template
-    unlet Template
-
-    normal G
-    delete G
-
-    let hasfind=search(g:TemplateCursorFlag)
+function! s:find(text, repl)
+    let hasfind=search('\C'.a:text)
     if hasfind
-        let line = getline('.')
-        let repl = substitute(line, g:TemplateCursorFlag, '', '')
-        call setline('.', repl)
+        let pos = getpos('.')
+        let line = substitute(getline('.'), a:text, a:repl, '')
+        call setline('.', line)
+        return pos
     endif
+    return [1,1]
 endfunction
 
-com! -nargs=1 -range=% NewTemplate call NewTemplate(<f-args>, 'window')
-if v:version > 700
-    com! -nargs=1 -range=% NewTemplateTab call NewTemplate(<f-args>, 'tab')
-endif
+fun! s:Filename(...)
+	let filename = expand('%:t:r')
+	if filename == '' | return a:0 == 2 ? a:2 : '' | endif
+	let filename = !a:0 || a:1 == '' ? filename : substitute(a:1, '$1', filename, 'g')
+    return substitute(filename, '^.', '\u&', '')
+endf
+fun! s:filename(...)
+	let filename = expand('%:t:r')
+	if filename == '' | return a:0 == 2 ? a:2 : '' | endif
+	return !a:0 || a:1 == '' ? filename : substitute(a:1, '$1', filename, 'g')
+endf
+
+function! s:cursor()
+    try | call s:find('${date}', strftime("%Y/%m/%d")) | catch /.*/ | endtry
+    try | call s:find('${filename}', s:filename('', 'page title')) | catch /.*/ | endtry
+    try | call s:find('${FileName}', s:Filename('', 'Page Title')) | catch /.*/ | endtry
+    try
+        let cur = s:find('${cursor}', '')
+        call setpos('.', cur)
+    catch /.*/
+    endtry
+
+    return ''
+endfunction
+
+autocmd! BufNewFile * silent! 0r $VIM/vimfiles/template/template.%:e|:call <SID>cursor()

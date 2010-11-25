@@ -140,11 +140,11 @@ function acp#meetsForXmlOmni(context)
 endfunction
 
 "
-function acp#meetsForHtmlOmni(context)
-  return g:acp_behaviorHtmlOmniLength >= 0 &&
-        \ a:context =~ '\(<\|<\/\|<[^>]\+ \|<[^>]\+=\"\)\k\{' .
-        \              g:acp_behaviorHtmlOmniLength . ',}$'
-endfunction
+"function acp#meetsForHtmlOmni(context)
+  "return g:acp_behaviorHtmlOmniLength >= 0 &&
+        "\ a:context =~ '\(<\|<\/\|<[^>]\+ \|<[^>]\+=\"\)\k\{' .
+        "\              g:acp_behaviorHtmlOmniLength . ',}$'
+"endfunction
 
 "
 function acp#meetsForCssOmni(context)
@@ -197,7 +197,7 @@ function acp#onPopupPost()
           \                                                 : "\<C-p>\<Down>")
   endif
   let s:iBehavs += 1
-  if len(s:behavsCurrent) > s:iBehavs 
+  if len(s:behavsCurrent) > s:iBehavs
     call s:setCompletefunc()
     return printf("\<C-e>%s\<C-r>=acp#onPopupPost()\<CR>",
           \       s:behavsCurrent[s:iBehavs].command)

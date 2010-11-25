@@ -191,6 +191,10 @@ colo hotoo_manuscript
 "colo wombat
 
 
+hi TabLine     cterm=none ctermfg=lightgrey ctermbg=lightblue guifg=gray guibg=black
+hi TabLineSel  cterm=none ctermfg=lightgrey ctermbg=LightMagenta guifg=white guibg=black
+hi TabLineFill cterm=none ctermfg=lightblue ctermbg=lightblue guifg=black guibg=black
+
 
 " @see :help mbyte-IME
 if has('multi_byte_ime')
@@ -800,7 +804,6 @@ autocmd FileType javascript let g:AutoComplPop_CompleteOption = '.,w,b,u,t,i,k$V
 
 autocmd FileType javascript set dictionary=$VIM/vimfiles/dict/javascript.dict,$VIM/vimfiles/dict/jQuery.dict,$VIM/vimfiles/dict/jQuery.dict
 "autocmd FileType javascript set omnifunc=javascriptcomplete#CompleteJS
-
 
 
 " Doxygen
