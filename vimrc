@@ -579,6 +579,8 @@ autocmd FileType c nmap <F10> :w<cr>:setlocal makeprg=gcc\ -Wall\ -o\ %:r.exe\ %
 autocmd FileType cpp,c nmap <F5> :!%:r.exe
 autocmd FileType dosbatch nmap <F5> :!%<cr><cr>
 
+autocmd FileType mxml,actionscript nmap <F10> :w<cr>:setlocal makeprg=mxmlc\ -output\ %:r.swf\ %<cr>:make<cr><cr>:cw<cr>
+
 autocmd FileType css syn region foldBraces start=/{/ end=/}/ transparent fold keepend extend
 
 au BufReadCmd   *.epub      call zip#Browse(expand("<amatch>"))
