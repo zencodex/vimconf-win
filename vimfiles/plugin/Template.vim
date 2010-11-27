@@ -3,41 +3,56 @@
 " Author: 闲耘™(hotoo.cn[AT]gmail.com)
 " Last Change: 2010/11/25
 
+if exists('loaded_smart_template')
+    finish
+endif
+let loaded_smart_template=1
 
-function! s:find(text, repl)
-    let hasfind=search('\C'.a:text)
-    if hasfind
-        let pos = getpos('.')
-        let line = substitute(getline('.'), a:text, a:repl, '')
+if !exists('g:template_dir')
+    let g:template_dir = substitute(globpath(&rtp, 'template/'), "\n", ',', 'g')
+endif
+if !exists('g:template_author')
+    let g:template_author = ''
+endif
+
+function! s:replace(text, repl, flag)
+    let pos=[1, 1]
+    call cursor(1, 1)
+    let hasfind=searchpos('\C'.a:text)
+    while hasfind!=[0,0]
+        let pos = hasfind
+        let line = substitute(getline('.'), a:text, a:repl, a:flag)
         call setline('.', line)
-        return pos
-    endif
-    return [1,1]
+
+        let hasfind = 'g'==a:flag?searchpos('\C'.a:text,'W'):[0,0]
+    endwhile
+
+    return pos
 endfunction
 
-fun! s:Filename(...)
+fun! s:filename(default)
 	let filename = expand('%:t:r')
-	if filename == '' | return a:0 == 2 ? a:2 : '' | endif
-	let filename = !a:0 || a:1 == '' ? filename : substitute(a:1, '$1', filename, 'g')
-    return substitute(filename, '^.', '\u&', '')
+    return ''==filename ? a:default : filename
 endf
-fun! s:filename(...)
-	let filename = expand('%:t:r')
-	if filename == '' | return a:0 == 2 ? a:2 : '' | endif
-	return !a:0 || a:1 == '' ? filename : substitute(a:1, '$1', filename, 'g')
+fun! s:Filename(default)
+    return substitute(s:filename(a:default), '\<.', '\U\0', 'g')
+endf
+fun! s:FILENAME(default)
+    return substitute(s:filename(a:default), '.*', '\U\0', '')
 endf
 
-function! s:cursor()
-    try | call s:find('${date}', strftime("%Y/%m/%d")) | catch /.*/ | endtry
-    try | call s:find('${filename}', s:filename('', 'page title')) | catch /.*/ | endtry
-    try | call s:find('${FileName}', s:Filename('', 'Page Title')) | catch /.*/ | endtry
-    try
-        let cur = s:find('${cursor}', '')
-        call setpos('.', cur)
-    catch /.*/
-    endtry
+function! s:template()
+    call s:replace('${datetime}', strftime("%Y/%m/%d %H:%M:%S"), 'g')
+    call s:replace('${date}', strftime("%Y/%m/%d"), 'g')
+    call s:replace('${FILENAME}', s:FILENAME('UNAMED'), 'g')
+    call s:replace('${FileName}', s:Filename('Unamed'), 'g')
+    call s:replace('${filename}', s:filename('unamed'), 'g')
+    call s:replace('${author}', g:template_author, 'g')
+    let cur = s:replace('${cursor}', '', '')
+    call setpos(".", [0, cur[0], cur[1]])
+    "call cursor(cur)
 
     return ''
 endfunction
 
-autocmd! BufNewFile * silent! 0r $VIM/vimfiles/template/template.%:e|:call <SID>cursor()
+exec 'autocmd! BufNewFile * silent! 0r '.g:template_dir.'template.%:e|:call <SID>template()'
