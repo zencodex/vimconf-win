@@ -620,5 +620,6 @@ function! g:Jsbeautify()
 	:put!0
 endfunction
 
+command -nargs=0 Format :silent! call g:Jsbeautify()
 "nnoremap <silent> <leader>ff :call g:Jsbeautify()<cr>
 nmap <silent> <F1> :call g:Jsbeautify()<cr>

@@ -167,13 +167,13 @@ if has('win32')
     " max open window
     au GUIEnter * simalt ~x
 
-    au! bufwritepost hosts !start cmd /C ipconfig /flushdns<cr>
-    command -nargs=0 Vimrc :tabnew $VIM/vimrc
+    au! bufwritepost hosts silent !start cmd /C ipconfig /flushdns
+    command -nargs=0 Vimrc :silent! tabnew $VIM/vimrc
     " @see http://practice.chatserve.com/hosts.html
-    command -nargs=0 Hosts :tabnew c:\windows\system32\drivers\etc\hosts
+    command -nargs=0 Hosts :silent! tabnew c:\windows\system32\drivers\etc\hosts
 else
-    command -nargs=0 Vimrc :tabnew ~/.vim/vimrc
-    command -nargs=0 Hosts :tabnew /etc/hosts
+    command -nargs=0 Vimrc :silent! tabnew ~/.vim/vimrc
+    command -nargs=0 Hosts :silent! tabnew /etc/hosts
 endif
 
 " set default(normal) window size.
@@ -903,7 +903,10 @@ let tlist_javascript_settings = 'javascript;f:Functions;c:Classes;o:Objects'
 " @see http://www.vim.org/scripts/script.php?script_id=2540
 " @see http://code.google.com/p/snipmate/
 " @see http://vimeo.com/3535418
-let snips_author="闲耘 (mail[AT]xianyun.org)"
+let snips_author="闲耘™ (hotoo.cn[AT]gmail.com)"
+
+" for smart template.vim
+let g:template_author = '闲耘™ (hotoo.cn[AT]gmail.com)'
 
 " }}}
 

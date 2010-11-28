@@ -1,8 +1,7 @@
 /**
  * @overview
  *
- * @see
- * @author 闲耘(mail[AT]xianyun.org)
+ * @author ${author}
  * @version ${date}
  */
 

@@ -13,10 +13,13 @@
 " http://wiki.whatwg.org/wiki/Validator.nu_GNU_Output
 " http://wiki.whatwg.org/wiki/Validator.nu_Common_Input_Parameters
 function! ValidateCSS()
-    set makeprg=validate-css.bat\ %
-    set errorformat=Line\ :\ %l\ %m
+    "let fmt=substitute(&errorformat, " \+", "\ ", "g")
+
+    setlocal makeprg=validate-css.bat\ %
+    setlocal errorformat=Line\ :\ %l\ %m
 
     make
+    "exec "setlocal errorformat=".fmt
     cw
 endfunction
 
@@ -28,4 +31,5 @@ endfunction
 " <!DOCTYPE html> could be detected instead of relying on the html filetype
 " somehow integrate http://code.google.com/doctype/ or MDC?
 
+command -nargs=0 Validate :call ValidateCSS()
 nmap <F9> :call ValidateCSS()<cr><cr>
