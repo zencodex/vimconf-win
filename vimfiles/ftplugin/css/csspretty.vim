@@ -162,5 +162,5 @@ if !exists("g:CssPrettyLeftBraceAtNewLine")
     let g:CssPrettyLeftBraceAtNewLine=0
 endif
 
-command -nargs=0 Format :silent! call CssPretty()
+command! -nargs=0 Format :silent! call CssPretty()
 nmap <F1> :call CssPretty()<cr>
