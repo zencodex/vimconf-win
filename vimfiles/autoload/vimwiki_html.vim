@@ -25,6 +25,7 @@ endif
 
 " SCRIPT VARS "{{{
 " Warn if html header or html footer do not exist only once.
+let s:warn_html_template = 0
 let s:warn_html_header = 0
 let s:warn_html_footer = 0
 "}}}
@@ -94,6 +95,21 @@ function! s:create_default_CSS(path) " {{{
     echomsg "Default style.css is created."
   endif
 endfunction "}}}
+
+" templates replace placeholders.
+let s:templates = {}
+function! s:get_template(name)
+  let lines = []
+  let tmp = VimwikiGet('html_template') . name . '.html'
+  if VimwikiGet('html_template')!=name.".html" && !s:warn_html_template
+    try
+      let lines = readfile(expand(VimwikiGet('html_template')))
+    catch /E484/
+      let s:warn_html_template = 1
+      echomsg 'vimwiki: template '. VimwikiGet
+    endtry
+  endif
+endfunction
 
 function! s:get_html_header(title, subdir, charset) "{{{
   let lines=[]
