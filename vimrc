@@ -71,11 +71,11 @@ endfunction
 
 " @see http://vim.wikia.com/wiki/Selecting_changes_in_diff_mode
 if &diff
-    nmap <F7> :call Jump2DiffText("prev")<cr>
-    nmap <F8> :call Jump2DiffText("next")<cr>
+    nmap <buffer> <F7> :call Jump2DiffText("prev")<cr>
+    nmap <buffer> <F8> :call Jump2DiffText("next")<cr>
 else
-    map <F7> :cp<cr>
-    map <F8> :cn<cr>
+    map <buffer> <F7> :cp<cr>
+    map <buffer> <F8> :cn<cr>
 endif
 
 " }}}
@@ -161,6 +161,8 @@ endif
 " @see http://blog.xianyun.org/2009/09/14/vim-fonts.html
 if has("win32")
     set guifont=Courier_New:h11:cANSI
+    "set guifont=Microsoft_YaHei_Mono:h11:cANSI
+
     "set guifont=monaco:h11:cANSI
     "set guifont=Consola:h11:cANSI
     "set guifont=DajaVu:h11:cANSI
@@ -524,18 +526,18 @@ endfunction
 "nmap <F4> :cclose<CR>
 nmap <F4> :cw<CR>
 " compile c/cpp code.
-autocmd FileType cpp,c nmap <F9> :setlocal makeprg=make<cr>:make<cr> :copen<cr> <C-W>10_
-"autocmd FileType cpp,c nmap <F10> :exe "!gcc -o ".expand("%:r").".exe ".expand("%")<cr>
-"autocmd FileType cpp,c nmape <F10> :!gcc -o %:r.exe %<cr>
+autocmd FileType cpp,c nmap <buffer> <F9> :setlocal makeprg=make<cr>:make<cr> :copen<cr> <C-W>10_
+"autocmd FileType cpp,c nmap <buffer> <F10> :exe "!gcc -o ".expand("%:r").".exe ".expand("%")<cr>
+"autocmd FileType cpp,c nmape <buffer> <F10> :!gcc -o %:r.exe %<cr>
 " @see http://easwy.com/blog/archives/advanced-vim-skills-quickfix-mode/
 "      http://blog.zdnet.com.cn/html/30/422230-2881199.html
-autocmd FileType cpp nmap <F10> :w<cr>:setlocal makeprg=g++\ -Wall\ -o\ %:r.exe\ %<cr>:make<cr><cr>:cw<cr>
-autocmd FileType c nmap <F10> :w<cr>:setlocal makeprg=gcc\ -Wall\ -o\ %:r.exe\ %<cr>:make<cr><cr>:cw<cr>
+autocmd FileType cpp nmap <buffer> <F10> :w<cr>:setlocal makeprg=g++\ -Wall\ -o\ %:r.exe\ %<cr>:make<cr><cr>:cw<cr>
+autocmd FileType c nmap <buffer> <F10> :w<cr>:setlocal makeprg=gcc\ -Wall\ -o\ %:r.exe\ %<cr>:make<cr><cr>:cw<cr>
 " run current code.
-autocmd FileType cpp,c nmap <F5> :!%:r.exe
-autocmd FileType dosbatch nmap <F5> :!%<cr><cr>
+autocmd FileType cpp,c nmap <buffer> <F5> :!%:r.exe
+autocmd FileType dosbatch nmap <buffer> <F5> :!%<cr><cr>
 
-autocmd FileType mxml,actionscript nmap <F10> :w<cr>:setlocal makeprg=mxmlc\ -output\ %:r.swf\ %<cr>:make<cr><cr>:cw<cr>
+autocmd FileType mxml,actionscript nmap <buffer> <F10> :w<cr>:setlocal makeprg=mxmlc\ -output\ %:r.swf\ %<cr>:make<cr><cr>:cw<cr>
 
 autocmd FileType css syn region foldBraces start=/{/ end=/}/ transparent fold keepend extend
 
@@ -577,7 +579,7 @@ function! RunP5()
     let class_path=java_home."\\lib\\rt.jar;".java_home."\\lib\\tools.jar;".processing_path."\\lib\\antlr.jar;".processing_path."\\lib\\core.jar;".processing_path."lib\\ecj.jar;".processing_path."\\lib\\jna.jar;".processing_path."\\lib\\pde.jar"
     silent execute '!start '.java_home.'\\bin\\java -classpath "'.class_path.'" processing.app.Commander --sketch="'.expand("%:h").'" --output="output" --run'
 endfunction
-autocmd FileType processing nnoremap <silent> <F9> :up<CR>:call RunP5()<CR>
+autocmd FileType processing nnoremap <buffer> <silent> <F9> :up<CR>:call RunP5()<CR>
 autocmd FileType processing so $VIM/vimfiles/autoload/processing_omni.vim
 autocmd FileType processing set ofu=OmniProcessing
 
@@ -736,6 +738,8 @@ let g:vimwiki_user_html_list = "search.html,404.html"
 " @see http://hi.baidu.com/timeless/blog/item/cb4478f09a1563ca7931aa5d.html
 " Note: functions and key maps invalid.
 "
+autocmd WinLeave *.html :call acp#enable()
+autocmd WinEnter *.html :call acp#disable()
 "let g:acp_behaviorSnipmateLength = 1        " AutoComplete snippets for snipMate.
 let g:AutoComplPop_MappingDriven = 1        " Don't popup when move cursor.
 let g:AutoComplPop_IgnoreCaseOption = 1

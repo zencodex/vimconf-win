@@ -31,5 +31,5 @@ function MinifyCSS()
     cw
 endfunction
 
-command! -nargs=0 Tidy :silent! call MinifyCSS()
-nmap <F10> :call MinifyCSS()<cr><cr>
+command! -nargs=0 -buffer Tidy :silent! call MinifyCSS()
+nmap <buffer> <F10> :call MinifyCSS()<cr><cr>

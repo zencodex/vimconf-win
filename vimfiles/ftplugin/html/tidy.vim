@@ -8,8 +8,8 @@ function! TidyHTML()
 endfunction
 
 
-nmap <F10> :call TidyHTML()<cr>
-"nmap <F1> :!tidy -mi -xml -utf8 %:p<cr><cr><cr>
+nmap <buffer> <F10> :call TidyHTML()<cr>
+"nmap <buffer> <F1> :!tidy -mi -xml -utf8 %:p<cr><cr><cr>
 
 
 function! Save2Temp()
@@ -29,5 +29,6 @@ function! Save2Temp()
     endif
 endfunction
 
-nmap <F5> :call Save2Temp()<cr><cr>:!start RunDll32.exe shell32.dll,ShellExec_RunDLL %:p<cr>
-nmap <C-F5> :call Save2Temp()<cr><cr>:!start "C:\Program Files\Mozilla Firefox\firefox.exe" -P debug %<cr>
+" preview current page in default browser or firefix.
+nmap <buffer> <F5> :call Save2Temp()<cr><cr>:!start RunDll32.exe shell32.dll,ShellExec_RunDLL %:p<cr>
+nmap <buffer> <C-F5> :call Save2Temp()<cr><cr>:!start "C:\Program Files\Mozilla Firefox\firefox.exe" -P debug %<cr>

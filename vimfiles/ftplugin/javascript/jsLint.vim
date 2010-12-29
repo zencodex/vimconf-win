@@ -128,4 +128,4 @@ function s:ClearCursorLineColor()
   endif
 endfunction
 
-nmap <F9> :call JsonLint()<cr>
+nmap <buffer> <F9> :call JsonLint()<cr>

@@ -31,5 +31,5 @@ endfunction
 " <!DOCTYPE html> could be detected instead of relying on the html filetype
 " somehow integrate http://code.google.com/doctype/ or MDC?
 
-command -nargs=0 Validate :call ValidateCSS()
-nmap <F9> :call ValidateCSS()<cr><cr>
+command -nargs=0 -buffer Validate :call ValidateCSS()
+nmap <buffer> <F9> :call ValidateCSS()<cr><cr>
