@@ -140,6 +140,8 @@ set lines=30
 "colo colorzone
 "colo fu
 colo hotoo_manuscript
+"colo stackoverflow
+"colo newspaper
 "colo wombat
 
 
@@ -738,8 +740,16 @@ let g:vimwiki_user_html_list = "search.html,404.html"
 " @see http://hi.baidu.com/timeless/blog/item/cb4478f09a1563ca7931aa5d.html
 " Note: functions and key maps invalid.
 "
-autocmd WinLeave *.html :call acp#enable()
-autocmd WinEnter *.html :call acp#disable()
+autocmd FileType html :AcpDisable
+autocmd FileType xhtml :AcpDisable
+autocmd WinLeave *.htm :AcpUnlock
+autocmd WinEnter *.htm :AcpLock
+autocmd WinLeave *.html :AcpUnlock
+autocmd WinEnter *.html :AcpLock
+
+autocmd FileType velocity :AcpDisable
+autocmd WinLeave *.vm :AcpEnable
+autocmd WinEnter *.vm :AcpDisable
 "let g:acp_behaviorSnipmateLength = 1        " AutoComplete snippets for snipMate.
 let g:AutoComplPop_MappingDriven = 1        " Don't popup when move cursor.
 let g:AutoComplPop_IgnoreCaseOption = 1
