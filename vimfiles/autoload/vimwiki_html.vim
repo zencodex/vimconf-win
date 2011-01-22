@@ -207,14 +207,16 @@ function! s:delete_html_files(path) "{{{
       continue
     endif
     if del_count == 0
-      echomsg 'Deleting not exist html files...'
+      "echomsg 'Deleting not exist html files...'
     endif
     let del_count += 1
     try
       call delete(fname)
-      echomsg "  ".del_count.". ".fname
+      "echomsg "  ".del_count.". ".fname
+      call setqflist([{"filename":fname, "lnum":1, "col":1, "text" : "Deleted."}], 'a')
     catch
-      echomsg 'vimwiki: Cannot delete '.fname
+      "echomsg 'vimwiki: Cannot delete '.fname
+      call setqflist([{"filename":fname, "lnum":1, "col":1, "text" : "Delete failed."}], 'a')
     endtry
   endfor
   return del_count
@@ -1342,12 +1344,14 @@ function! vimwiki_html#WikiAll2HTML(path, bang) "{{{
   "exe 'buffer '.cur_buf
   "let &eventignore = save_eventignore
 
+  :copen
+
   let path = expand(a:path)
   call vimwiki#mkdir(path)
 
   let del_count = s:delete_html_files(path)
 
-  echomsg 'Converting wiki to html files...'
+  "echomsg 'Converting wiki to html files...'
   let setting_more = &more
   setlocal nomore
 
@@ -1357,11 +1361,12 @@ function! vimwiki_html#WikiAll2HTML(path, bang) "{{{
     let cnt = vimwiki_html#Wiki2HTML(path, wikifile, a:bang)
     if cnt==1
       let build_count += 1
-      echomsg '  '.build_count.'. '.wikifile
+      "echomsg '  '.build_count.'. '.wikifile
+      call setqflist([{"filename":wikifile, "lnum":1, "col":1, "text" : "Converted."}], 'a')
     endif
   endfor
   call s:create_default_CSS(path)
-  echomsg 'Done!                                                         Delete('.del_count.'), Build('.build_count.')'
+  echomsg 'Done!            Deleted('.del_count.'), Converted('.build_count.')'
 
   let &more = setting_more
 endfunction "}}}
