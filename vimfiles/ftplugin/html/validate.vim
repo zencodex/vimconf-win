@@ -28,4 +28,4 @@ endfunction
 " <!DOCTYPE html> could be detected instead of relying on the html filetype
 " somehow integrate http://code.google.com/doctype/ or MDC?
 
-nmap <F9> :call ValidateHTML()<cr><cr>
+nmap <buffer> <F9> :call ValidateHTML()<cr><cr>

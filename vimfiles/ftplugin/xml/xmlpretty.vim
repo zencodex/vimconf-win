@@ -193,4 +193,4 @@ function! XmlPretty(...)
 	endif
 endfunction
 
-nmap <F1> :call XmlPretty()<cr>
+nmap <buffer> <F1> :call XmlPretty()<cr>
