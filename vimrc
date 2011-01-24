@@ -742,10 +742,10 @@ let g:vimwiki_user_html_list = "search.html,404.html"
 "
 autocmd FileType html :AcpDisable
 autocmd FileType xhtml :AcpDisable
-autocmd WinLeave *.htm :AcpUnlock
-autocmd WinEnter *.htm :AcpLock
-autocmd WinLeave *.html :AcpUnlock
-autocmd WinEnter *.html :AcpLock
+autocmd WinLeave *.htm :AcpEnable
+autocmd WinEnter *.htm :AcpDisable
+autocmd WinLeave *.html :AcpEnable
+autocmd WinEnter *.html :AcpDisable
 
 autocmd FileType velocity :AcpDisable
 autocmd WinLeave *.vm :AcpEnable
