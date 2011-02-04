@@ -11,6 +11,48 @@ noremap <buffer> <Leader>rt :TextileRenderTab<CR>
 setlocal ignorecase
 setlocal wrap
 setlocal lbr
+inoremap <buffer> <expr> <cr> <SID>TextileNewLine()
+nnoremap <buffer> o :call <SID>TextileOo('o')<CR>a
+nnoremap <buffer> O :call <SID>TextileOo('O')<CR>a
+
+let s:re_list = '^\s*\(\*\|#\|\d\.\|[ivxdIVXD]\+\.\|>\)\s\+'
+
+function! s:TextileNewLine()
+    let cr = "\<cr>"
+    if 0 == pumvisible()
+        let cr .= matchstr(getline("."), s:re_list)
+    endif
+    return cr
+endfunction
+function! s:TextileOo(cmd) "{{{
+  " cmd should be 'o' or 'O'
+
+  let beg_lnum = foldclosed('.')
+  let end_lnum = foldclosedend('.')
+  if end_lnum != -1 && a:cmd ==# 'o'
+    let lnum = end_lnum
+    let line = getline(beg_lnum)
+  else
+    let line = getline('.')
+    let lnum = line('.')
+  endif
+
+  let m = matchstr(line, s:re_list)
+  let res = ''
+  if line =~ s:re_list
+    let res = substitute(m, '\s*$', ' ', '')
+  elseif &autoindent || &smartindent
+    let res = matchstr(line, '^\s*')
+  endif
+  if a:cmd ==# 'o'
+    call append(lnum, res)
+    call cursor(lnum + 1, col('$'))
+  else
+    call append(lnum - 1, res)
+    call cursor(lnum, col('$'))
+  endif
+endfunction "}}}
+
 
 function! TextileRender(lines)
   if (system('which ruby') == "")
@@ -48,4 +90,3 @@ function! TextileRenderBufferToTab()
   call append("^", split(html, "\n"))
   set syntax=html
 endfunction
-
