@@ -15,12 +15,31 @@ inoremap <buffer> <expr> <cr> <SID>TextileNewLine()
 nnoremap <buffer> o :call <SID>TextileOo('o')<CR>a
 nnoremap <buffer> O :call <SID>TextileOo('O')<CR>a
 
-let s:re_list = '^\s*\(\*\|#\|\d\.\|[ivxdIVXD]\+\.\|>\)\s\+'
+let s:re_list = '^\s*\(\*\|#\|[ivxdIVXD]\+\.\|>\)\s\+'
+let s:re_order_number_list = '^\s*\(\d\+\.\)\s\+'
 
 function! s:TextileNewLine()
     let cr = "\<cr>"
     if 0 == pumvisible()
-        let cr .= matchstr(getline("."), s:re_list)
+        let line = getline(".")
+        if(line =~ s:re_order_number_list)
+            let m = matchstr(line, s:re_order_number_list)
+            let n = str2nr(m) + 1
+            let cr .= substitute(m, '\d\+', n, "")
+
+            "let lineNum = line(".") + 1
+            "let line = getline(lineNum)
+            "let n = n+1
+            "while line =~ s:re_order_number_list
+                " 不允许在此处使用。
+                "call setline(lineNum, substitute(line, '\d\+', n, ""))
+                "let lineNum = lineNum + 1
+                "let line = getline(lineNum)
+                "let n = n+1
+            "endw
+        else
+            let cr .= matchstr(getline("."), s:re_list)
+        endif
     endif
     return cr
 endfunction
@@ -37,17 +56,47 @@ function! s:TextileOo(cmd) "{{{
     let lnum = line('.')
   endif
 
-  let m = matchstr(line, s:re_list)
   let res = ''
-  if line =~ s:re_list
+  if line =~ s:re_order_number_list
+    let m = matchstr(line, s:re_order_number_list)
+    let res = substitute(m, '\s*$', ' ', '')
+  elseif line =~ s:re_list
+    let m = matchstr(line, s:re_list)
     let res = substitute(m, '\s*$', ' ', '')
   elseif &autoindent || &smartindent
     let res = matchstr(line, '^\s*')
   endif
   if a:cmd ==# 'o'
+    if(line =~ s:re_order_number_list)
+      let m = matchstr(line, s:re_order_number_list)
+      let n = str2nr(m) + 1
+      let res = substitute(m, '\d\+', n, "")
+
+      let lineNum = line(".") + 1
+      let line = getline(lineNum)
+      let n = n+1
+      while line =~ s:re_order_number_list
+        call setline(lineNum, substitute(line, '\d\+', n, ""))
+        let lineNum = lineNum + 1
+        let line = getline(lineNum)
+        let n = n+1
+      endw
+    endif
     call append(lnum, res)
     call cursor(lnum + 1, col('$'))
   else
+    if(line =~ s:re_order_number_list)
+      let m = matchstr(line, s:re_order_number_list)
+      let n = str2nr(m) + 1
+      let lineNum = line(".")
+      let line = getline(lineNum)
+      while line =~ s:re_order_number_list
+        call setline(lineNum, substitute(line, '\d\+', n, ""))
+        let lineNum = lineNum + 1
+        let line = getline(lineNum)
+        let n = n+1
+      endw
+    endif
     call append(lnum - 1, res)
     call cursor(lnum, col('$'))
   endif
