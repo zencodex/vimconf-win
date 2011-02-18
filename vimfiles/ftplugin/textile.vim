@@ -11,38 +11,13 @@ noremap <buffer> <Leader>rt :TextileRenderTab<CR>
 setlocal ignorecase
 setlocal wrap
 setlocal lbr
-inoremap <buffer> <expr> <cr> <SID>TextileNewLine()
+inoremap <buffer> <cr> <c-o>:call <SID>TextileOo('o')<cr>
 nnoremap <buffer> o :call <SID>TextileOo('o')<CR>a
 nnoremap <buffer> O :call <SID>TextileOo('O')<CR>a
 
 let s:re_list = '^\s*\(\*\|#\|[ivxdIVXD]\+\.\|>\)\s\+'
 let s:re_order_number_list = '^\s*\(\d\+\.\)\s\+'
 
-function! s:TextileNewLine()
-    let cr = "\<cr>"
-    if 0 == pumvisible()
-        let line = getline(".")
-        if(line =~ s:re_order_number_list)
-            let m = matchstr(line, s:re_order_number_list)
-            let n = str2nr(m) + 1
-            let cr .= substitute(m, '\d\+', n, "")
-
-            "let lineNum = line(".") + 1
-            "let line = getline(lineNum)
-            "let n = n+1
-            "while line =~ s:re_order_number_list
-                " 不允许在此处使用。
-                "call setline(lineNum, substitute(line, '\d\+', n, ""))
-                "let lineNum = lineNum + 1
-                "let line = getline(lineNum)
-                "let n = n+1
-            "endw
-        else
-            let cr .= matchstr(getline("."), s:re_list)
-        endif
-    endif
-    return cr
-endfunction
 function! s:TextileOo(cmd) "{{{
   " cmd should be 'o' or 'O'
 
