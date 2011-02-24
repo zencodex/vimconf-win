@@ -213,7 +213,8 @@ set linebreak       " break full word.
 set autoindent      " new line indent same this line.
 set smartindent
 
-
+set splitright
+"set splitbelow
 
 " Folds.
 set foldmethod=syntax
@@ -740,17 +741,8 @@ let g:vimwiki_user_html_list = "search.html,404.html"
 " @see http://hi.baidu.com/timeless/blog/item/cb4478f09a1563ca7931aa5d.html
 " Note: functions and key maps invalid.
 "
-autocmd FileType html :AcpDisable
-autocmd FileType xhtml :AcpDisable
-autocmd WinLeave *.htm :AcpEnable
-autocmd WinEnter *.htm :AcpDisable
-autocmd WinLeave *.html :AcpEnable
-autocmd WinEnter *.html :AcpDisable
-
-autocmd FileType velocity :AcpDisable
-autocmd WinLeave *.vm :AcpEnable
-autocmd WinEnter *.vm :AcpDisable
 "let g:acp_behaviorSnipmateLength = 1        " AutoComplete snippets for snipMate.
+let g:acp_behaviorHtmlOmniLength = -1
 let g:AutoComplPop_MappingDriven = 1        " Don't popup when move cursor.
 let g:AutoComplPop_IgnoreCaseOption = 1
 " @see http://d.hatena.ne.jp/cooldaemon/20071114/1195029893
