@@ -157,17 +157,18 @@ set columns=90
 set lines=30
 
 " theme, skin, color
-"colo desert
-"colo hotoo
-"colo ir_desert
-"colo manuscript
-"colo colorzone
-"colo fu
-colo hotoo_manuscript
-"colo stackoverflow
-"colo newspaper
-"colo wombat
-
+if OS#gui
+    "colo desert
+    "colo hotoo
+    "colo ir_desert
+    "colo manuscript
+    "colo colorzone
+    "colo fu
+    colo hotoo_manuscript
+    "colo stackoverflow
+    "colo newspaper
+    "colo wombat
+endif
 
 hi TabLine     cterm=none ctermfg=lightgrey ctermbg=lightblue guifg=gray guibg=black
 hi TabLineSel  cterm=none ctermfg=lightgrey ctermbg=LightMagenta guifg=white guibg=black
@@ -224,7 +225,10 @@ endif
 if OS#win
     let MRU_File = $VIM.'\_vim_mru_files'
 else
-    let MRU_File = ~/.vim_mru_files
+    try
+        let MRU_File = ~/.vim_mru_files
+    catch /.*/
+    endtry
 endif
 let MRU_Max_Entries = 1000
 
@@ -245,8 +249,6 @@ if has("persistent_undo")
     "    au BufWritePre ~/.undodir/* setlocal noundofile
     endif
 endif
-
-set autochdir
 
 " 加速光标闪烁。
 " @see http://c9s.blogspot.com/2007/12/gvim.html
@@ -276,7 +278,12 @@ set foldcolumn=0
 set ignorecase
 set smartcase
 set number
-set colorcolumn=81
+
+if OS#gui
+    set autochdir
+    set colorcolumn=81
+endif
+
 hi ColorColumn guibg=#444444
 " for Vim72-
 "syn match out80 /\%80v./ containedin=ALL
@@ -865,7 +872,7 @@ autocmd FileType * let g:AutoComplPop_CompleteOption = '.,w,b,u,t,i'
 "autocmd FileType ruby let g:AutoComplPop_CompleteOption = '.,w,b,u,t,i,k~/.vim/dict/ruby.dict'
 if OS#win
     autocmd FileType javascript let g:AutoComplPop_CompleteOption = '.,w,b,u,t,i,k$VIM/vimfiles/dict/javascript.dict'
-elseif
+else
     autocmd FileType javascript let g:AutoComplPop_CompleteOption = '.,w,b,u,t,i,k$VIM/vimfiles/dict/javascript.dict'
 endif
 "autocmd FileType erlang let g:AutoComplPop_CompleteOption = '.,w,b,u,t,i,k~/.vim/dict/erlang.dict'
