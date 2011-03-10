@@ -1,0 +1,24 @@
+snippet template
+	<?xml version="1.0" encoding="utf-8"?>
+	<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="${1:absolute}">
+		${2}
+	</mx:Application>
+snippet mx:app
+	<?xml version="1.0" encoding="utf-8"?>
+	<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="${1:absolute}">
+		${2}
+	</mx:Application>
+snippet mx:button
+	<mx:Button label="${1}" />
+snippet mx:label
+	<mx:Label text="${1}" />
+snippet mx:array
+	<mx:Array id="${1}">
+		${2}
+	</mx:Array>
+snippet mx:string
+	<mx:String>${1}</mx:String>
+snippet mx:list
+	<mx:List dataProvider="{${array_data}}"></mx:List>
+snippet mx:tree
+	<mx:Tree labelField="@label" dataProvider="{${data}}"></mx:Tree>
