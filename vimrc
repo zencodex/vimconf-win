@@ -17,29 +17,29 @@
 " @see http://vim.wikia.com/wiki/Version_Control_for_Vimfiles
 
 if has("win32") || has("win32unix")
-    let OS#name = "win"
-    let OS#win = 1
-    let OS#mac = 0
-    let OS#unix = 0
+    let g:OS#name = "win"
+    let g:OS#win = 1
+    let g:OS#mac = 0
+    let g:OS#unix = 0
 elseif has("mac")
-    let OS#name = "mac"
-    let OS#mac = 1
-    let OS#win = 0
-    let OS#unix = 0
+    let g:OS#name = "mac"
+    let g:OS#mac = 1
+    let g:OS#win = 0
+    let g:OS#unix = 0
 elseif has("unix")
-    let OS#name = "unix"
-    let OS#unix = 1
-    let OS#win = 0
-    let OS#mac = 0
+    let g:OS#name = "unix"
+    let g:OS#unix = 1
+    let g:OS#win = 0
+    let g:OS#mac = 0
 endif
 if has("gui_running")
-    let OS#gui = 1
+    let g:OS#gui = 1
 else
-    let OS#gui = 0
+    let g:OS#gui = 0
 endif
 
 set nocompatible
-if OS#win
+if g:OS#win
     source $VIMRUNTIME/vimrc_example.vim
     source $VIMRUNTIME/mswin.vim
     behave mswin
@@ -138,26 +138,71 @@ let $FENCVIEW_TELLENC='tellenc'
 set fileformat=unix
 set fileformats=unix,dos,mac
 
+" set default(normal) window size.
+set columns=90
+set lines=30
 
-if OS#win
+let s:lines = str2nr(&lines)
+let s:columns = str2nr(&columns)
+function! MaximumWindow()
+    if g:OS#win
+        set lines=999
+        set columns=9999
+    else
+        set lines=999
+    endif
+endfunction
+function! NoMaximumWindow()
+    if g:OS#win
+        let &lines=s:lines
+        let &columns=s:columns
+    else
+        let &lines=s:lines
+    endif
+endfunction
+command -nargs=0 Max :call MaximumWindow()
+command -nargs=0 Min :call NoMaximumWindow()
+command -nargs=0 NoMax :call NoMaximumWindow()
+command -nargs=0 Nomax :call NoMaximumWindow()
+
+
+function! FullScreenToggle()
+    if g:OS#win
+        if has("libcall")
+            call libcallnr("gvimfullscreen.dll", "ToggleFullScreen", 0)
+        endif
+    elseif g:OS#mac
+        if &fullscreen
+            set nofullscreen
+        else
+            set fullscreen
+        endif
+    endif
+endfunction
+command -nargs=0 FullScreen :call FullScreenToggle()
+
+if g:OS#win
     " max open window
     au GUIEnter * simalt ~x
+    nnoremap <F11> :call FullScreenToggle()<cr>
+    inoremap <F11> <C-o><F11>
 
     au! bufwritepost hosts silent !start cmd /C ipconfig /flushdns
     command -nargs=0 Vimrc :silent! tabnew $VIM/vimrc
     " @see http://practice.chatserve.com/hosts.html
     command -nargs=0 Hosts :silent! tabnew c:\windows\system32\drivers\etc\hosts
 else
+    " <F11> is global hotkey for display desktop.
+    nnoremap <C-F11> :call FullScreenToggle()<cr>
+    inoremap <C-F11> <C-o>:call FullScreenToggle()<cr>
+    set transparency=6
+
     command -nargs=0 Vimrc :silent! tabnew ~/.vim/vimrc
     command -nargs=0 Hosts :silent! sudo tabnew /etc/hosts
 endif
 
-" set default(normal) window size.
-set columns=90
-set lines=30
-
 " theme, skin, color
-if OS#gui
+if g:OS#gui
     "colo desert
     "colo hotoo
     "colo ir_desert
@@ -182,7 +227,7 @@ if has('multi_byte_ime')
 endif
 
 
-"if OS#mac && OS#gui
+"if g:OS#mac && g:OS#gui
 " 效果不好
     "autocmd! InsertLeave * set imdisable
     "autocmd! InsertEnter * set noimdisable
@@ -192,7 +237,7 @@ endif
 " @see http://support.microsoft.com/kb/306527/zh-cn
 " @see http://www.gracecode.com/archives/1545/
 " @see http://blog.xianyun.org/2009/09/14/vim-fonts.html
-if OS#win
+if g:OS#win
     set guifont=Courier_New:h16:cANSI
     "set guifont=Microsoft_YaHei_Mono:h11:cANSI
 
@@ -216,13 +261,13 @@ endif
 
 " swrap file, auto backup.
 set nobackup
-if OS#win
+if g:OS#win
     set directory=$VIM\tmp
 else
     set directory=~/.tmp
 endif
 
-if OS#win
+if g:OS#win
     let MRU_File = $VIM.'\_vim_mru_files'
 else
     try
@@ -234,17 +279,17 @@ let MRU_Max_Entries = 1000
 
 
 if has("persistent_undo")
-    if OS#win || OS#unix
+    if g:OS#win || g:OS#unix
         set undofile
         set undolevels=1000
         set undodir=$VIM\undodir
         au BufWritePre undodir/* setlocal noundofile
-    elseif OS#unix
+    elseif g:OS#unix
         set undofile
         set undolevels=1000
         set undodir=~/.undodir
         au BufWritePre ~/.undodir/* setlocal noundofile
-    "elseif OS#mac
+    "elseif g:OS#mac
     "    set undodir=~/.undodir
     "    au BufWritePre ~/.undodir/* setlocal noundofile
     endif
@@ -279,7 +324,7 @@ set ignorecase
 set smartcase
 set number
 
-if OS#gui
+if g:OS#gui
     set autochdir
     set colorcolumn=81
 endif
@@ -301,7 +346,7 @@ set ambiwidth=double
 "
 " set cursorcolumn
 set cursorline
-if OS#win
+if g:OS#win
     hi cursorline gui=underline guibg=NONE cterm=underline
 endif
 
@@ -310,7 +355,7 @@ set history=500
 " Show tab number in your tab line
 " @see http://vim.wikia.com/wiki/Show_tab_number_in_your_tab_line
 " :h tabline
-if OS#gui
+if g:OS#gui
     " TODO: for MacVim.
     set guitablabel=%N.%t
 endif
@@ -490,7 +535,7 @@ nmap c=l $F=c^
 " use Meta key(Windows:Alt) to move cursor in insert mode.
 " Note: if system install "Lingoes Translator",
 "   you will need change/disabled hot key.
-if OS#mac
+if g:OS#mac
     noremap! <D-j> <Down>
     noremap! <D-k> <Up>
     "noremap! <D-h> <left>
@@ -528,7 +573,7 @@ function! FileExplorer(path)
     else
         let p = a:path
     endif
-    if OS#win && exists("+shellslash") && &shellslash
+    if g:OS#win && exists("+shellslash") && &shellslash
         let p = substitute(p, "/", "\\", "g")
     endif
 
@@ -538,11 +583,11 @@ function! FileExplorer(path)
         " If chcp doesn't work, set its value manually here.
         let code_page = 'cp936'
     endif
-    if OS#win && !has('win32unix') && (&enc!=code_page)
+    if g:OS#win && !has('win32unix') && (&enc!=code_page)
         let p = iconv(p, &enc, code_page)
     endif
 
-    if OS#win
+    if g:OS#win
         exec ":!start explorer /select, " . p
         " Open Explorer Tree.
         "exec ":!start explorer /e,/select, " . p
@@ -551,7 +596,7 @@ function! FileExplorer(path)
     endif
 endfunction
 
-if OS#win
+if g:OS#win
     " Open Windows Explorer and Fouse current file.
     "                                      %:p:h     " Just Fold Name.
     nmap <F6> :call FileExplorer("")<cr>
@@ -578,7 +623,7 @@ imap <C-tab> :tabnext<cr>
 nmap <C-tab> :tabnext<cr>
 imap <C-S-tab> :tabprevious<cr>
 nmap <C-S-tab> :tabprevious<cr>
-if OS#mac
+if g:OS#mac
     imap <D-1> <Esc>:tabfirst<cr>
     nmap <D-1> :tabfirst<cr>
     imap <D-2> <Esc>2gt
@@ -712,16 +757,17 @@ imap <C-L> <C-x><C-o>
 
 " Toggle Menu and Toolbar
 " @see http://liyanrui.is-programmer.com/articles/1791/gvim-menu-and-toolbar-toggle.html
-set guioptions-=m
-set guioptions-=T
-map <silent> <F2> :if &guioptions =~# 'T' <Bar>
-        \set guioptions-=T <Bar>
-        \set guioptions-=m <bar>
-    \else <Bar>
-        \set guioptions+=T <Bar>
-        \set guioptions+=m <Bar>
-    \endif<CR>
-
+if g:OS#gui
+    set guioptions-=m
+    set guioptions-=T
+    map <silent> <F2> :if &guioptions =~# 'T' <Bar>
+            \set guioptions-=T <Bar>
+            \set guioptions-=m <bar>
+        \else <Bar>
+            \set guioptions+=T <Bar>
+            \set guioptions+=m <Bar>
+        \endif<CR>
+endif
 
 " Dynamic bind <HOME> key
 " if caret/cursor not at the frist non-white-space character
@@ -835,7 +881,7 @@ command -nargs=0 TopWin :call libcallnr("vimtweak.dll", "EnableTopMost", 1)
 command -nargs=0 UnTopWin :call libcallnr("vimtweak.dll", "EnableTopMost", 0)
 
 
-if OS#win
+if g:OS#win
     "autocmd FileType xhtml,html command! -nargs=0 IE :call Save2Temp()<cr><cr>:!start RunDll32.exe shell32.dll,ShellExec_RunDLL %:p<cr>
     autocmd FileType xhtml,html command! -nargs=0 FF :call Save2Temp()<cr><cr>:!start "E:\Mozilla Firefox\firefox.exe" -P debug %<cr>
     autocmd FileType xhtml,html command! -nargs=0 IE6 :call Save2Temp()<cr><cr>:!start "E:\Mozilla Firefox\firefox.exe" -P debug %<cr>
@@ -870,7 +916,7 @@ let g:AutoComplPop_IgnoreCaseOption = 1
 autocmd FileType * let g:AutoComplPop_CompleteOption = '.,w,b,u,t,i'
 "autocmd FileType perl let g:AutoComplPop_CompleteOption = '.,w,b,u,t,k~/.vim/dict/perl.dict'
 "autocmd FileType ruby let g:AutoComplPop_CompleteOption = '.,w,b,u,t,i,k~/.vim/dict/ruby.dict'
-if OS#win
+if g:OS#win
     autocmd FileType javascript let g:AutoComplPop_CompleteOption = '.,w,b,u,t,i,k$VIM/vimfiles/dict/javascript.dict'
 else
     autocmd FileType javascript let g:AutoComplPop_CompleteOption = '.,w,b,u,t,i,k$VIM/vimfiles/dict/javascript.dict'
@@ -904,22 +950,12 @@ let g:DoxygenToolkit_licenseTag = s:licenseTag
 let g:DoxygenToolkit_briefTag_funcName="yes"
 let g:doxygen_enhanced_color=1
 
-if OS#win
-    " gvim full screen plugin
-    " @see http://www.vim.org/scripts/script.php?script_id=2596
-    " @see http://www.gracecode.com/archives/2946/
-    nmap <F11> :call libcallnr("gvimfullscreen.dll", "ToggleFullScreen", 0)<cr>
-    imap <F11> <C-o><F11>
-elseif OS#mac
-    set transparency=6
-endif
-
 
 " jsLint
 " @see http://www.gracecode.com/category/496/
 " @see http://www.vim.org/scripts/script.php?script_id=2578
 " @see http://www.javascriptlint.com/index.htm
-if OS#win
+if g:OS#win
     let g:jslint_command = $VIM.'\vimfiles\jslint\jsl.exe'
 else
     let g:jslint_command = '~/.vim/jslint/jsl'
@@ -963,7 +999,7 @@ nmap <F3> :ToggleNERDTree<cr>
 
 
 " ctags
-if OS#win
+if g:OS#win
     let g:ctags_path=$VIM.'\vimfiles\plugin\ctags.exe'
 else
     let g:ctags_path='~/.vim/plugin/ctags'
@@ -974,7 +1010,7 @@ let g:ctags_args=1
 
 " TagList
 " @see http://easwy.com/blog/archives/advanced-vim-skills-taglist-plugin/
-if OS#win
+if g:OS#win
     let Tlist_Ctags_Cmd=$VIM.'\vimfiles\plugin\ctags.exe'
 else
     let Tlist_Ctags_Cmd= '/usr/bin/ctags'
@@ -1066,7 +1102,7 @@ autocmd FileType css command! -range -nargs=0 ToUnicode <line1>,<line2>call ToUn
 " }}}
 
 " Chinese Docs
-if OS#win
+if g:OS#win
     let helptags=$VIM.'\vimfiles\doc'
 else
     let helptags='~/.vim/doc'
