@@ -192,7 +192,7 @@ if g:OS#win
     endif
 
     au! bufwritepost hosts silent !start cmd /C ipconfig /flushdns
-    command -nargs=0 Vimrc :silent! tabnew $VIM/vimrc
+    command -nargs=0 Vimrc :silent! tabnew $VIM/vimfiles/vimrc
     " @see http://practice.chatserve.com/hosts.html
     command -nargs=0 Hosts :silent! tabnew c:\windows\system32\drivers\etc\hosts
 else
