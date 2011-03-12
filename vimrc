@@ -1048,7 +1048,11 @@ let g:template_author = '闲耘™ (hotoo.cn[AT]gmail.com)'
 
 " ------------------------------- Folding ---------------------------- {{{
 ":au BufNewFile,BufRead *.xml,*.htm,*.html so ~/.vim/plugin/XMLFolding.vim
-au BufNewFile,BufRead *.xml,*.htm,*.html,*.vm,*.php,*.jsp so $VIM/vimfiles/ftplugin/xml/xml_fold.vim
+if g:OS#win
+    au BufNewFile,BufRead *.xml,*.htm,*.html,*.vm,*.php,*.jsp so $VIM/vimfiles/ftplugin/xml/xml_fold.vim
+else
+    au BufNewFile,BufRead *.xml,*.htm,*.html,*.vm,*.php,*.jsp so ~/.vim/ftplugin/xml/xml_fold.vim
+endif
 
 " }}}
 
