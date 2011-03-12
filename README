@@ -19,11 +19,11 @@
 
 +- vimrc
 |   |
-|   +- .vimrc_example       Unix-like 系统的样本配置文件，本质上是导入 vimrc
+|   +- .vimrc_sample       Unix-like 系统的样本配置文件，本质上是导入 vimrc
 |   |
-|   +- _vimrc_example       针对 Windows gvim 的样本配置文件，同 .vimrc
+|   +- _vimrc_sample       针对 Windows gvim 的样本配置文件，同 .vimrc
 |   |
-|   +- sysrc_example.vim    针对系统的特殊设置，比如 Vimwiki 项目的存储目录。
+|   +- sysrc_sample.vim    针对系统的特殊设置，比如 Vimwiki 项目的存储目录。
 |   |
 |   +- vimrc                统一管理的 Vim 设置信息，目前主要支持 Mac & Windows。
 |   |
@@ -59,5 +59,5 @@ for Windows:
     $ vi vimfiles/sysrc.vim
     $ cp vimfiles/_vimrc_sample ./_vimrc
 
-上面的 .sysrc_example.vim 和 sysrc_example.vim 的内容参考对应的范例文件。
+上面的 .sysrc_sample.vim 和 sysrc_sample.vim 的内容参考对应的范例文件。
 for Windows 的 "C:\Program Files\Vim" 是你的 Vim 实际安装目录。

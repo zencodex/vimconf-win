@@ -232,11 +232,14 @@ if has('multi_byte_ime')
 endif
 
 
-"if g:OS#mac && g:OS#gui
-" 效果不好
-    "autocmd! InsertLeave * set imdisable
-    "autocmd! InsertEnter * set noimdisable
-"endif
+if g:OS#mac && g:OS#gui
+    set noimdisable
+    set imactivatekey=D-space
+    set imsearch=0
+    "inoremap <ESC> <ESC>:set iminsert=0<CR>
+    autocmd! InsertLeave * set imdisable|set iminsert=0
+    autocmd! InsertEnter * set noimdisable|set iminsert=2
+endif
 
 " fonts
 " @see http://support.microsoft.com/kb/306527/zh-cn
