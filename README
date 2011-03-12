@@ -18,18 +18,46 @@
 
 
 +- vimrc
-    |
-    +- _vimrc           针对 Windows gvim 的配置文件，本质上是导入 vimrc，
-    |                   其他系统(.vimrc)也是如此，可以方便统一管理配置文件。
-    |
-    +- sysrc.vim        针对系统的特殊设置，比如 Vimwiki 项目的存储目录。
-    |
-    +- vimrc            统一管理的 Vim 设置信息。
-    |
-    +- addons           一些外部工具。
-    |
-    +- tmp              用来存储临时文件的目录，请手工创建。
-    |
-    +- undodir          存储持久化撤销文件的目录，请手工创建。
-    |
-    +- _vim_mru_files   MRU.vim 保存的列表文件，如果没有请手工创建。
+|   |
+|   +- .vimrc               Unix-like 系统的配置文件，本质上是导入 vimrc
+|   |
+|   +- _vimrc               针对 Windows gvim 的配置文件，同 .vimrc
+|   |
+|   +- sysrc.vim            针对系统的特殊设置，比如 Vimwiki 项目的存储目录。
+|   |
+|   +- vimrc                统一管理的 Vim 设置信息，目前主要支持 Mac & Windows。
+|   |
+|   `- addons               一些外部工具。
+|
++- .tmp
++- tmp               用来存储临时文件的目录，请手工创建。
+|
++- .undodir
++- undodir           存储持久化撤销文件的目录，请手工创建。
+|
++- .vim_mru_files
+`- _vim_mru_files    MRU.vim 保存的列表文件，如果没有请手工创建。
+
+
+== Install ==
+
+for Unix-like(Mac, Linux):
+    $ cd ~
+    $ mkdir .tmp .undodir
+    $ touch .vim_mru_files
+    $ git clone git@github.com:hotoo/vimrc.git .vim
+    $ cp .vim/.sysrc_example.vim ./sysrc.vim
+    $ vi .sysrc.vim
+    $ cp .vim/.vimrc_example ./.vimrc
+
+for Windows:
+    $ cd "C:\Program Files\Vim"
+    $ mkdir tmp undodir
+    $ touch _vim_mru_files
+    $ git clone git@github.com:hotoo/vimrc.git vimfiles
+    $ cp vimfiles/sysrc_example.vim ./sysrc.vim
+    $ vi vimfiles/sysrc.vim
+    $ cp vimfiles/_vimrc_example ./_vimrc
+
+上面的 .sysrc_example.vim 和 sysrc_example.vim 的内容参考对应的范例文件。
+for Windows 的 "C:\Program Files\Vim" 是你的 Vim 实际安装目录。

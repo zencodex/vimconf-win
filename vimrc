@@ -183,22 +183,27 @@ command -nargs=0 FullScreen :call FullScreenToggle()
 
 if g:OS#win
     " max open window
-    au GUIEnter * simalt ~x
-    nnoremap <F11> :call FullScreenToggle()<cr>
-    inoremap <F11> <C-o><F11>
+    if g:OS#gui
+        au GUIEnter * simalt ~x
+        nnoremap <F11> :call FullScreenToggle()<cr>
+        inoremap <F11> <C-o><F11>
+    endif
 
     au! bufwritepost hosts silent !start cmd /C ipconfig /flushdns
     command -nargs=0 Vimrc :silent! tabnew $VIM/vimrc
     " @see http://practice.chatserve.com/hosts.html
     command -nargs=0 Hosts :silent! tabnew c:\windows\system32\drivers\etc\hosts
 else
-    " <F11> is global hotkey for display desktop.
-    nnoremap <C-F11> :call FullScreenToggle()<cr>
-    inoremap <C-F11> <C-o>:call FullScreenToggle()<cr>
-    set transparency=6
+    if g:OS#gui
+        " <F11> is global hotkey for display desktop.
+        nnoremap <C-F11> :call FullScreenToggle()<cr>
+        inoremap <C-F11> <C-o>:call FullScreenToggle()<cr>
+        set transparency=5
+    endif
 
     command -nargs=0 Vimrc :silent! tabnew ~/.vim/vimrc
-    command -nargs=0 Hosts :silent! sudo tabnew /etc/hosts
+    " readonly.
+    command -nargs=0 Hosts :silent! tabnew /etc/hosts
 endif
 
 " theme, skin, color
