@@ -232,14 +232,16 @@ if has('multi_byte_ime')
 endif
 
 
-if g:OS#mac && g:OS#gui
-    set noimdisable
-    set imactivatekey=D-space
-    set imsearch=0
+" FIXME: bugs by FIT.
+"if g:OS#mac && g:OS#gui
+    "set noimdisable
+    "set imactivatekey=D-space
+    "set imsearch=0
+    "set imcmdline=0
+    "autocmd! InsertLeave * set imdisable|set iminsert=0
+    "autocmd! InsertEnter * set noimdisable|set iminsert=2
     "inoremap <ESC> <ESC>:set iminsert=0<CR>
-    autocmd! InsertLeave * set imdisable|set iminsert=0
-    autocmd! InsertEnter * set noimdisable|set iminsert=2
-endif
+"endif
 
 " fonts
 " @see http://support.microsoft.com/kb/306527/zh-cn
@@ -922,9 +924,9 @@ let g:AutoComplPop_MappingDriven = 1        " Don't popup when move cursor.
 let g:AutoComplPop_IgnoreCaseOption = 1
 " @see http://d.hatena.ne.jp/cooldaemon/20071114/1195029893
 autocmd FileType * let g:AutoComplPop_CompleteOption = '.,w,b,u,t,i'
-"autocmd FileType perl let g:AutoComplPop_CompleteOption = '.,w,b,u,t,k~/.vim/dict/perl.dict'
-"autocmd FileType ruby let g:AutoComplPop_CompleteOption = '.,w,b,u,t,i,k~/.vim/dict/ruby.dict'
 if g:OS#win
+    "autocmd FileType perl let g:AutoComplPop_CompleteOption = '.,w,b,u,t,k~/.vim/dict/perl.dict'
+    "autocmd FileType ruby let g:AutoComplPop_CompleteOption = '.,w,b,u,t,i,k~/.vim/dict/ruby.dict'
     autocmd FileType javascript let g:AutoComplPop_CompleteOption = '.,w,b,u,t,i,k$VIM/vimfiles/dict/javascript.dict'
 else
     autocmd FileType javascript let g:AutoComplPop_CompleteOption = '.,w,b,u,t,i,k$VIM/vimfiles/dict/javascript.dict'

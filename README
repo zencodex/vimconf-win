@@ -54,10 +54,14 @@ for Windows:
     $ cd "C:\Program Files\Vim"
     $ mkdir tmp undodir
     $ touch _vim_mru_files
+    $ rmdir /s /q vimfiles
     $ git clone git@github.com:hotoo/vimrc.git vimfiles
-    $ cp vimfiles/sysrc_sample.vim ./sysrc.vim
+    $ copy vimfiles\.sysrc_sample.vim sysrc.vim
     $ vi vimfiles/sysrc.vim
-    $ cp vimfiles/_vimrc_sample ./_vimrc
+    $ del _vimrc
+    $ copy vimfiles\_vimrc_sample _vimrc
+    $ copy vimfiles\addons\curl.exe C:\WINDOWS\system32
+    $ copy vimfiles\addons\libeay32.dll C:\WINDOWS\system32
 
 上面的 .sysrc_sample.vim 和 sysrc_sample.vim 的内容参考对应的范例文件。
 for Windows 的 "C:\Program Files\Vim" 是你的 Vim 实际安装目录。
