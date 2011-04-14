@@ -45,31 +45,33 @@ if g:OS#win
     behave mswin
 endif
 
-" MyDiff {{{
-set diffexpr=MyDiff()
-function MyDiff()
-  let opt = '-a --binary '
-  if &diffopt =~ 'icase' | let opt = opt . '-i ' | endif
-  if &diffopt =~ 'iwhite' | let opt = opt . '-b ' | endif
-  let arg1 = v:fname_in
-  if arg1 =~ ' ' | let arg1 = '"' . arg1 . '"' | endif
-  let arg2 = v:fname_new
-  if arg2 =~ ' ' | let arg2 = '"' . arg2 . '"' | endif
-  let arg3 = v:fname_out
-  if arg3 =~ ' ' | let arg3 = '"' . arg3 . '"' | endif
-  let eq = ''
-  if $VIMRUNTIME =~ ' '
-    if &sh =~ '\<cmd'
-      let cmd = '""' . $VIMRUNTIME . '\diff"'
-      let eq = '"'
-    else
-      let cmd = substitute($VIMRUNTIME, ' ', '" ', '') . '\diff"'
-    endif
-  else
-    let cmd = $VIMRUNTIME . '\diff'
-  endif
-  silent execute '!' . cmd . ' ' . opt . arg1 . ' ' . arg2 . ' > ' . arg3 . eq
-endfunction
+if g:OS#win
+    " MyDiff {{{
+    set diffexpr=MyDiff()
+    function MyDiff()
+      let opt = '-a --binary '
+      if &diffopt =~ 'icase' | let opt = opt . '-i ' | endif
+      if &diffopt =~ 'iwhite' | let opt = opt . '-b ' | endif
+      let arg1 = v:fname_in
+      if arg1 =~ ' ' | let arg1 = '"' . arg1 . '"' | endif
+      let arg2 = v:fname_new
+      if arg2 =~ ' ' | let arg2 = '"' . arg2 . '"' | endif
+      let arg3 = v:fname_out
+      if arg3 =~ ' ' | let arg3 = '"' . arg3 . '"' | endif
+      let eq = ''
+      if $VIMRUNTIME =~ ' '
+        if &sh =~ '\<cmd'
+          let cmd = '""' . $VIMRUNTIME . '\diff"'
+          let eq = '"'
+        else
+          let cmd = substitute($VIMRUNTIME, ' ', '" ', '') . '\diff"'
+        endif
+      else
+        let cmd = $VIMRUNTIME . '\diff'
+      endif
+      silent execute '!' . cmd . ' ' . opt . arg1 . ' ' . arg2 . ' > ' . arg3 . eq
+    endfunction
+endif
 
 function! Jump2DiffText(dir)
     if a:dir=="prev"
@@ -190,7 +192,7 @@ if g:OS#win
     endif
 
     au! bufwritepost hosts silent !start cmd /C ipconfig /flushdns
-    command -nargs=0 Vimrc :silent! tabnew $VIM/vimrc
+    command -nargs=0 Vimrc :silent! tabnew $VIM/vimfiles/vimrc
     " @see http://practice.chatserve.com/hosts.html
     command -nargs=0 Hosts :silent! tabnew c:\windows\system32\drivers\etc\hosts
 else
@@ -248,7 +250,7 @@ endif
 " @see http://www.gracecode.com/archives/1545/
 " @see http://blog.xianyun.org/2009/09/14/vim-fonts.html
 if g:OS#win
-    set guifont=Courier_New:h16:cANSI
+    set guifont=Courier_New:h12:cANSI
     "set guifont=Microsoft_YaHei_Mono:h11:cANSI
 
     "set guifont=monaco:h11:cANSI
@@ -381,6 +383,7 @@ endif
 " User Defined Status Line.
 " @see http://www.vim.org/scripts/script.php?script_id=8 for VimBuddy.
 function! GetFileTime()
+    " FIXME: get file name.
     let file = expand("%")
     if "" == file
         return ""
@@ -394,10 +397,13 @@ function! GetFileTime()
     let M = strftime('%M', lastmodify)
     let S = strftime('%S', lastmodify)
 
-    return "(".str.")"
+    echomsg str
+    return str
 endfunction
+command -nargs=0 LastModify :call GetFileTime()
+
 set laststatus=2
-set statusline=%t\ %1*%m%*\ %1*%r%*\ %2*%h%*%w%=%{GetFileTime()}\ %l%3*/%L(%p%%)%*,%c%V]\ [%b:0x%B]\ [%{&ft==''?'TEXT':toupper(&ft)},%{toupper(&ff)},%{toupper(&fenc!=''?&fenc:&enc)}%{&bomb?',BOM':''}%{&eol?'':',NOEOL'}]
+set statusline=%t\ %1*%m%*\ %1*%r%*\ %2*%h%*%w%=%l%3*/%L(%p%%)%*,%c%V]\ [%b:0x%B]\ [%{&ft==''?'TEXT':toupper(&ft)},%{toupper(&ff)},%{toupper(&fenc!=''?&fenc:&enc)}%{&bomb?',BOM':''}%{&eol?'':',NOEOL'}]
 "let &statusline=' %t %{&mod?(&ro?"*":"+"):(&ro?"=":" ")} %1*|%* %{&ft==""?"any":&ft} %1*|%* %{&ff} %1*|%* %{(&fenc=="")?&enc:&fenc}%{(&bomb?",BOM":"")} %1*|%* %=%1*|%* 0x%B %1*|%* (%l,%c%V) %1*|%* %L %1*|%* %P'
 hi User1 guibg=red guifg=yellow
 hi User2 guibg=#008000 guifg=white
@@ -717,6 +723,9 @@ autocmd FileType dosbatch nmap <buffer> <F5> :!%<cr><cr>
 autocmd FileType mxml,actionscript nmap <buffer> <F10> :w<cr>:setlocal makeprg=mxmlc\ -output\ %:r.swf\ %<cr>:make<cr><cr>:cw<cr>
 
 autocmd FileType css syn region foldBraces start=/{/ end=/}/ transparent fold keepend extend
+
+autocmd FileType velocity let b:match_words = '#if\>:#elseif\>:#else\>:#end\>,'
+		\ . '#foreach\>:#end\>'
 
 au BufReadCmd   *.epub      call zip#Browse(expand("<amatch>"))
 

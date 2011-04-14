@@ -19,13 +19,14 @@
 
 +- vimrc
 |   |
-|   +- .vimrc_sample       Unix-like 系统的样本配置文件，本质上是导入 vimrc
+|   +- .vimrc_sample        Unix-like 系统的样本配置文件，本质上是导入 vimrc
 |   |
-|   +- _vimrc_sample       针对 Windows gvim 的样本配置文件，同 .vimrc
+|   +- _vimrc_sample        针对 Windows gvim 的样本配置文件，同 .vimrc
 |   |
-|   +- sysrc_sample.vim    针对系统的特殊设置，比如 Vimwiki 项目的存储目录。
+|   +- sysrc_sample.vim     针对系统的特殊设置，比如 Vimwiki 项目的存储目录、
+|   |                       私有的账户信息等。
 |   |
-|   +- vimrc                统一管理的 Vim 设置信息，目前主要支持 Mac & Windows。
+|   +- vimrc                统一管理的 Vim 设置信息，目前已知支持 Mac & Windows。
 |   |
 |   `- addons               一些外部工具。
 |
@@ -62,6 +63,12 @@ for Windows:
     $ copy vimfiles\_vimrc_sample _vimrc
     $ copy vimfiles\addons\curl.exe C:\WINDOWS\system32
     $ copy vimfiles\addons\libeay32.dll C:\WINDOWS\system32
+    $ cp vimfiles/addons/gvimfullscreen.dll vim73
+    $ cp vimfiles/addons/vimtweak.dll vim73
+    $ cp vimfiles/addons/validate-css.bat C:\WINDOWS\system32
+    $ cp vimfiles/addons/validate-html.bat C:\WINDOWS\system32
 
-上面的 .sysrc_sample.vim 和 sysrc_sample.vim 的内容参考对应的范例文件。
-for Windows 的 "C:\Program Files\Vim" 是你的 Vim 实际安装目录。
+*注意：*
+- 上面的 .sysrc_sample.vim 和 sysrc_sample.vim 的内容参考对应的范例文件。
+- vim73 目录请以你的 Vim 实际版本为准。
+- for Windows 的 "C:\Program Files\Vim" 是你的 Vim 实际安装目录。
