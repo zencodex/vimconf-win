@@ -112,6 +112,8 @@ snippet transition
 	-moz-transition:-moz-${1:transform 0.2s ease-in}; -webkit-transition:-webkit-$1; -o-transition:-o-$1; transition:$1;
 # CSS Hacks.
 snippet minheight
+	min-height:${1:8em}; height:$1\0; height:auto\0;
+snippet minheight2
 	/* min height start */
 	/* for understanding browsers */
 	${1:.container}{
@@ -129,3 +131,58 @@ snippet clearfix
 	${1:.clearfix}:after{content:"\0020"; display:block; height:0; clear:both;}
 	$1{zoom:1;}
 # TODO: CSS Hacks...
+# for Alipay Alice.
+snippet ui-list
+	<h3>${1:一般列表(.ui-list)}</h3>
+	<ul class="ui-list">
+		<li class="ui-list-item"><a href="${2:#}">${3:item 1}</a></li>
+		<li class="ui-list-item"><a href="${4:#}">${5:item 2}</a></li>
+		<li class="ui-list-item"><a href="${6:#}">${7:item 3}</a></li>
+	</ul>
+snippet ui-nav
+	<h3>导航(.ui-nav)</h3>
+	<ul class="ui-nav">
+	  <li class="ui-nav-item">
+		  <a href="#">导航</a>
+		  <ul class="ui-nav-item-child">
+			  <li>item</li>
+			  <li>item</li>
+			  <li>item</li>
+		  </ul>
+	  </li>
+	  <li class="ui-nav-item ui-nav-item-current">
+		  <a href="#">导航</a>
+		  <ul class="ui-nav-item-child">
+			  <li>item</li>
+			  <li>item</li>
+			  <li>item</li>
+		  </ul>
+	  </li>
+	  <li class="ui-nav-item">
+		  <a href="#">导航</a>
+		  <ul class="ui-nav-item-child">
+			  <li>item</li>
+			  <li>item</li>
+			  <li>item</li>
+		  </ul>
+	  </li>
+	  <li class="ui-nav-item">
+		  <a href="#">导航</a>
+		  <ul class="ui-nav-item-child">
+			  <li>item</li>
+			  <li>item</li>
+			  <li>item</li>
+		  </ul>
+	  </li>
+	</ul>
+snippet ui-title
+	<h3>标题(.ui-title)</h3>
+	<div class="ui-title fn-clear">
+		<h2 class="ui-title-cnt fn-left">标题</h2>
+		<div class="ui-title-subcnt fn-left">
+			<!-- 标题中的其他内容 -->
+		</div>
+	</div> <!-- .ui-title -->
+
+	<!-- 如果标题没有其他内容，直接这样写 -->
+	<h2 class="ui-title">标题</h2>
