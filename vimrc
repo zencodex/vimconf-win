@@ -724,8 +724,9 @@ autocmd FileType mxml,actionscript nmap <buffer> <F10> :w<cr>:setlocal makeprg=m
 
 autocmd FileType css syn region foldBraces start=/{/ end=/}/ transparent fold keepend extend
 
-autocmd FileType velocity let b:match_words = '#if\>:#elseif\>:#else\>:#end\>,'
-		\ . '#foreach\>:#end\>'
+autocmd FileType velocity let b:match_words = '#if\>:#elseif\>:#else\>:#end\>'
+		\ . ',#foreach\>:#end\>'
+        \ . ',#macro\>:#end\>'
 
 au BufReadCmd   *.epub      call zip#Browse(expand("<amatch>"))
 
