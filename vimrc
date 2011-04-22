@@ -73,6 +73,22 @@ if g:OS#win
     endfunction
 endif
 
+function! UISvr()
+    if a:0 == 0
+        let ft = "js"
+        let win = "new"
+    elseif a:0 == 1
+        let ft = a:1
+        let win = "new"
+    else
+        let ft = a:1
+        let win = a:2
+    endif
+    let uisvrDir = finddir("uisvr", expand("%:p:h").";")
+    if filereadable("")
+endfunction
+command -nargs=* UISvr :call UISvr()
+
 function! Jump2DiffText(dir)
     if a:dir=="prev"
         exec "normal [c"
@@ -236,14 +252,20 @@ endif
 
 " FIXME: bugs by FIT.
 "if g:OS#mac && g:OS#gui
-    "set noimdisable
+    "set imdisable
     "set imactivatekey=D-space
     "set imsearch=0
+
     "set imcmdline=0
+
+    "autocmd! InsertLeave * set iminsert=0|set imdisable
+
     "autocmd! InsertLeave * set imdisable|set iminsert=0
     "autocmd! InsertEnter * set noimdisable|set iminsert=2
+
     "inoremap <ESC> <ESC>:set iminsert=0<CR>
 "endif
+
 
 " fonts
 " @see http://support.microsoft.com/kb/306527/zh-cn
@@ -1068,6 +1090,8 @@ if g:OS#win
 else
     au BufNewFile,BufRead *.xml,*.htm,*.html,*.vm,*.php,*.jsp so ~/.vim/ftplugin/xml/xml_fold.vim
 endif
+
+au BufNewFile,BufRead *.vm setl fenc=gbk
 
 " }}}
 
