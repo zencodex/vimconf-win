@@ -73,7 +73,13 @@ if g:OS#win
     endfunction
 endif
 
-function! UISvr()
+" uisvr support for alipay sofaMVC.
+" @usage :Uisvr
+"        :Uisvr css
+"        :Uisvr js split
+" FIXME: 远程挂载的目录，打开 uisvr 时有问题。
+" TODO: screen 下目录还是子目录时，对应的 uisvr 目录结构。
+function! UISvr(...)
     if a:0 == 0
         let ft = "js"
         let win = "new"
@@ -84,10 +90,27 @@ function! UISvr()
         let ft = a:1
         let win = a:2
     endif
-    let uisvrDir = finddir("uisvr", expand("%:p:h").";")
-    if filereadable("")
+
+    let sp = "/"
+    if g:OS#win && exists("+shellslash") && !(&shellslash)
+        let sp = "\\\\"
+    endif
+
+    let src_filename = expand("%:r")
+    let src_dir = expand("%:p:h")
+    let src_path = expand("%:p")
+    let uisvrDir = finddir('uisvr', expand('%:p:h').';')
+    let car = substitute(src_dir, '^.*'.sp.'htdocs'.sp.'templates'.sp.'\([a-zA-Z0-9]\+\)'.sp.'screen', '\1', "")
+    let uisvrDir = fnamemodify(uisvrDir, ":p")
+    let uisvr = uisvrDir . sp . car . sp . src_filename . "." . ft
+    exec win." ".uisvr
+    "if filereadable(uisvr)
+    "endif
 endfunction
-command -nargs=* UISvr :call UISvr()
+command -nargs=* Uisvr :call UISvr(<f-args>)
+command -nargs=* UISvr :call UISvr(<f-args>)
+command -nargs=* UISVR :call UISvr(<f-args>)
+
 
 function! Jump2DiffText(dir)
     if a:dir=="prev"
@@ -304,28 +327,21 @@ endif
 if g:OS#win
     let MRU_File = $VIM.'\_vim_mru_files'
 else
-    try
-        let MRU_File = ~/.vim_mru_files
-    catch /.*/
-    endtry
+    let MRU_File=~/.vim_mru_files
 endif
 let MRU_Max_Entries = 1000
 
 
 if has("persistent_undo")
-    if g:OS#win || g:OS#unix
-        set undofile
-        set undolevels=1000
+    set undofile
+    set undolevels=1000
+
+    if g:OS#win
         set undodir=$VIM\undodir
         au BufWritePre undodir/* setlocal noundofile
-    elseif g:OS#unix
-        set undofile
-        set undolevels=1000
+    else
         set undodir=~/.undodir
         au BufWritePre ~/.undodir/* setlocal noundofile
-    "elseif g:OS#mac
-    "    set undodir=~/.undodir
-    "    au BufWritePre ~/.undodir/* setlocal noundofile
     endif
 endif
 
@@ -607,7 +623,14 @@ map <C-S-kMinus> <C-w>_
 " @see http://www.zhuoqun.net/html/y2010/1516.html
 function! FileExplorer(path)
     if a:path == ""
-        let p = expand("%:p")
+        if has("win")
+            let p = expand("%:p")
+        elseif has("mac")
+            let p = expand("%:p:h")
+        else
+            echomsg "Not support."
+            return
+        endif
     else
         let p = a:path
     endif
@@ -630,22 +653,39 @@ function! FileExplorer(path)
         " Open Explorer Tree.
         "exec ":!start explorer /e,/select, " . p
     elseif has("mac")
-        exec ":!start open " . p
+        exec ':!open "' . p . '"'
     endif
 endfunction
 
-if g:OS#win
-    " Open Windows Explorer and Fouse current file.
-    "                                      %:p:h     " Just Fold Name.
-    nmap <F6> :call FileExplorer("")<cr>
-    imap <F6> <C-o><F6>
-    command -nargs=0 Explor :call FileExplorer("")
-    command -nargs=0 Explorer :call FileExplorer("")
+" Open Windows Explorer and Fouse current file.
+" or open Mac Finder.
+"                                      %:p:h     " Just Fold Name.
+nmap <F6> :call FileExplorer("")<cr>
+imap <F6> <C-o><F6>
+command -nargs=0 Explor :call FileExplorer("")
+command -nargs=0 Explorer :call FileExplorer("")
 
-    " Open command(cmd) window.
-    command -nargs=0 Cmd :!start cmd
-    command -nargs=0 Cmdhere :!start cmd
-endif
+let g:use_bash="zsh"
+" 打开终端窗口。
+" TODO: 默认打开指定的目录。
+" TODO: MacVim 的等待提示。
+" for MacOS
+" /Applications/Utilities/Terminal.app/Contents/MacOS/Terminal
+function! OpenBash(...)
+    let bash=':!open /bin/bash'
+
+    if g:OS#win
+        let bash=':!start cmd'
+    elseif "zsh" == g:use_bash
+        let bash=':!open /bin/zsh'
+    endif
+
+    exec bash
+endfunction
+command -nargs=? Cmdhere call OpenBash(<f-args>)
+command -nargs=? Bashere call OpenBash(<f-args>)
+command -nargs=? Bashhere call OpenBash(<f-args>)
+command SHELL silent cd %:p:h|silent exe "!start cmd"|silent cd -
 
 
 " tab navigation & operation like tabs browser
