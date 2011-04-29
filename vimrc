@@ -73,44 +73,6 @@ if g:OS#win
     endfunction
 endif
 
-" uisvr support for alipay sofaMVC.
-" @usage :Uisvr
-"        :Uisvr css
-"        :Uisvr js split
-" FIXME: 远程挂载的目录，打开 uisvr 时有问题。
-" TODO: screen 下目录还是子目录时，对应的 uisvr 目录结构。
-function! UISvr(...)
-    if a:0 == 0
-        let ft = "js"
-        let win = "new"
-    elseif a:0 == 1
-        let ft = a:1
-        let win = "new"
-    else
-        let ft = a:1
-        let win = a:2
-    endif
-
-    let sp = "/"
-    if g:OS#win && exists("+shellslash") && !(&shellslash)
-        let sp = "\\\\"
-    endif
-
-    let src_filename = expand("%:r")
-    let src_dir = expand("%:p:h")
-    let src_path = expand("%:p")
-    let uisvrDir = finddir('uisvr', expand('%:p:h').';')
-    let car = substitute(src_dir, '^.*'.sp.'htdocs'.sp.'templates'.sp.'\([a-zA-Z0-9]\+\)'.sp.'screen', '\1', "")
-    let uisvrDir = fnamemodify(uisvrDir, ":p")
-    let uisvr = uisvrDir . sp . car . sp . src_filename . "." . ft
-    exec win." ".uisvr
-    "if filereadable(uisvr)
-    "endif
-endfunction
-command -nargs=* Uisvr :call UISvr(<f-args>)
-command -nargs=* UISvr :call UISvr(<f-args>)
-command -nargs=* UISVR :call UISvr(<f-args>)
-
 
 function! Jump2DiffText(dir)
     if a:dir=="prev"
@@ -327,7 +289,11 @@ endif
 if g:OS#win
     let MRU_File = $VIM.'\_vim_mru_files'
 else
-    let MRU_File=~/.vim_mru_files
+    " try for Terminal.
+    try
+        let MRU_File = ~/.vim_mru_files
+    catch /.*/
+    endtry
 endif
 let MRU_Max_Entries = 1000
 
