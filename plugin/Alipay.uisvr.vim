@@ -3,14 +3,17 @@
 " @usage :Uisvr
 "        :Uisvr css
 "        :Uisvr js split
-" TODO:  :Uisvr vm
-" TODO:  :Uisvr xml -> config.xml
+"        :Uisvr vm
+"        :Uisvr xml    -> uisvr/config/config.xml
+"        :Uisvr css.vm -> uisvr/config/css.vm
+"        :Uisvr js.vm  -> uisvr/config/js.vm
 " FIXME: 远程挂载的目录，打开 uisvr 时有问题。
 " TODO: 已经打开的文件，不再新建窗口。
 " TODO: screen 下目录还是子目录时，对应的 uisvr 目录结构。
 " TODO: 老版 uisvr 支持(maybe)。
 " Author: 闲耘™(hotoo.cn[AT]gmail.com)
-" Last Change: 2011/04/29
+" Version: 1.5
+" Last Change: 2011/05/02
 
 if exists('loaded_alipay_uisvr')
     finish
@@ -24,73 +27,74 @@ endif
 
 let s:sp = "/"
 if g:OS#win && exists("+shellslash") && !(&shellslash)
-    let s:sp = "\\\\"
+    let s:sp = '\\'
 endif
 
 " @param {String} filetype in [js, css, vm, xml]
 " @param {String} open buffer type, like [new, vsp, sp, tabnew, ...]
 function! s:uisvr(...)
     let ft = expand("%:e")
+    if "js"!=ft && "css"!=ft && "vm"!=ft
+        echohl WarningMsg
+        echo "请在 JavaScript, CSS 和 Velocity 文件下执行 :Uisvr 命令。"
+        echohl None
+        return
+    endif
     let fname = expand("%:r")
     let fpath = expand("%:p")
     let fdir = expand("%:p:h")
 
     if a:0 == 0
-        let uisvrType = "js"
+        if "css"==ft || "js"==ft
+            let targetType = "vm"
+        elseif "vm"==ft
+            let targetType = "js"
+        endif
         let win = "new"
     elseif a:0 == 1
-        let uisvrType = a:1
+        let targetType = a:1
         let win = "new"
     else
-        let uisvrType = a:1
+        let targetType = a:1
         let win = a:2
     endif
 
-    if ft=="css" || ft=="js"
-        let path = s:uisvr#cssjs(fpath, uisvrType)
-    elseif ft=="xml"
-        let path = s:uisvr#xml(fpath, uisvrType)
-    elseif ft=="vm"
-        let path = s:uisvr_vm(fpath, uisvrType)
-    else
+    if "js"!=targetType && "css"!=targetType && "vm"!=targetType &&
+            \ "xml"!=targetType && "css.vm"!=targetType && "js.vm"!=targetType
+        echohl WarningMsg
+        echo ":Uisvr [css|js|vm|xml|css.vm|js.vm] [new|vsp|tabnew|...]"
+        echohl None
         return
     endif
 
-    exec win . " " . path
-    "if filereadable(uisvr)
-    "endif
+    let paths = s:getPaths()
+
+    exec win . " " . paths[targetType]
 endfunction
 
-function! s:uisvr#root(path)
-    return uisvrDir
-endfunction
-
-" Get velocity file path.
-function! s:uisvr_vm(fpath, uisvrType)
+function! s:getPaths()
+    let src_ext = expand("%:e")
     let src_filename = expand("%:r")
     let src_dir = expand("%:p:h")
     let src_path = expand("%:p")
     let uisvrDir = finddir('uisvr', expand('%:p:h').';')
-    let car = substitute(src_dir, '^.*'.s:sp.'htdocs'.s:sp.'templates'.s:sp.'\([a-zA-Z0-9]\+\)'.s:sp.'screen', '\1', "")
+    if "vm"==src_ext
+        let car = substitute(src_dir, '^.*'.s:sp.'htdocs'.s:sp.'templates'.s:sp.'\([a-zA-Z0-9]\+\)'.s:sp.'screen', '\1', "")
+    elseif "js"==src_ext || "css"==src_ext
+        let car = substitute(src_dir, '^.*'.s:sp.'htdocs'.s:sp.'uisvr'.s:sp.'\([a-zA-Z0-9]\+\)', '\1', "")
+    else
+        return
+    endif
     let uisvrDir = fnamemodify(uisvrDir, ":p")
-    let path = uisvrDir . s:sp . car . s:sp . src_filename . "." . a:uisvrType
+    let path = {
+                \ "css" : uisvrDir . s:sp . car . s:sp . src_filename . ".css",
+                \ "js"  : uisvrDir . s:sp . car . s:sp . src_filename . ".js",
+                \ "vm"  : uisvrDir . s:sp . ".." . s:sp . "templates" . s:sp . car . s:sp . "screen"  . s:sp . src_filename . ".vm",
+                \ "xml" : uisvrDir . s:sp . "config" . s:sp . "config.xml",
+                \ "js.vm" : uisvrDir . s:sp . "config" . s:sp . "js.vm",
+                \ "css.vm" : uisvrDir . s:sp . "config" . s:sp . "css.vm"
+                \ }
     return path
-endfunction
-
-" Get css/javascript file path.
-function! s:uisvr#cssjs(path, ft)
-    let src_filename = expand("%:r")
-    let src_dir = expand("%:p:h")
-    let src_path = expand("%:p")
-    let uisvrDir = finddir('uisvr', expand('%:p:h').';')
-    let car = substitute(src_dir, '^.*'.s:sp.'htdocs'.s:sp.'templates'.s:sp.'\([a-zA-Z0-9]\+\)'.s:sp.'screen', '\1', "")
-    let uisvrDir = fnamemodify(uisvrDir, ":p")
-    let path = uisvrDir . s:sp . car . s:sp . src_filename . "." . uisvrType
-    return path
-endfunction
-
-" Get config.xml file path.
-function! s:uisvr#xml()
 endfunction
 
 command -nargs=* Uisvr call <SID>uisvr(<f-args>)
