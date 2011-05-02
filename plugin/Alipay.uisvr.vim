@@ -26,7 +26,7 @@ if !exists('g:alipay_uisvr_path')
 endif
 
 let s:sp = "/"
-if g:OS#win && exists("+shellslash") && !(&shellslash)
+if has("win32") && exists("+shellslash") && !(&shellslash)
     let s:sp = '\\'
 endif
 
