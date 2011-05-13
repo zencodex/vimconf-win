@@ -113,20 +113,6 @@ snippet transition
 # CSS Hacks.
 snippet minheight
 	min-height:${1:8em}; height:$1\0; height:auto\0;
-snippet minheight2
-	/* min height start */
-	/* for understanding browsers */
-	${1:.container}{
-		min-height:${2:8em};
-		height:auto;
-	}
-	/* for Internet Explorer */
-	/*\*/
-	* html $1{
-		height:$2;
-	}
-	/**/
-	/* min height end */
 snippet clearfix
 	${1:.clearfix}:after{content:"\0020"; display:block; height:0; clear:both;}
 	$1{zoom:1;}
