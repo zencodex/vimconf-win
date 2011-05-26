@@ -41,6 +41,10 @@ function ClosureCompiler()
         let cmd_output = iconv(cmd_output, 'gbk', 'utf-8')
     endif
 
+    " clean quickfix window.
+    call setqflist([], 'r')
+    cclose
+
     " if some result were found, we echo them
     if strlen(cmd_output) > 0
         if has("win32")
@@ -50,11 +54,9 @@ function ClosureCompiler()
         endif
         let caret = '^\(\s*\^\)$'
         let lines = split(cmd_output, '\n')
-        echo len(lines)
         if len(lines) <= 1
             echo cmd_output
         else
-            call setqflist([], 'r')
             for line in lines
                 let m = matchlist(line, re)
                 let c = matchlist(line, caret)
@@ -82,4 +84,4 @@ endfunction
 " set up auto commands
 "au FileType javascript nnoremap <silent> <leader>gcc :call ClosureCompiler()<cr>
 "autocmd FileWritePost,BufWritePost *.js :call ClosureCompiler()
-au FileType javascript command -nargs=0 Compiler :call ClosureCompiler()
+au FileType javascript command! -nargs=0 Compiler :call ClosureCompiler()
