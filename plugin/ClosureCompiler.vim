@@ -11,14 +11,28 @@ endif
 let loaded_closure_compiler = 1
 
 if !exists("g:closure_compiler_command")
-    let g:closure_compiler_command = 'java -jar compiler.jar'
+    let g:closure_compiler_command = 'compiler.jar'
 endif
 
 function ClosureCompiler()
-    let current_file = shellescape(expand('%:p'))
-    let current_file_withoutEx = shellescape(expand('%:r'))
-    let current_file_Ex = shellescape(expand('%:e'))
-    let gcc = g:closure_compiler_command . ' ' . ' --js ' . current_file . ' --js_output_file ' . current_file_withoutEx . '.min.' . current_file_Ex
+    if !executable("java") || !executable(g:closure_compiler_command)
+        echohl WarningMsg
+        echo "required command: java and " . g:closure_compiler_command
+        echohl None
+        return
+    endif
+    let path = expand('%:p')
+    let path_noExt = expand('%:p:r')
+    let ext = expand('%:e')
+    let re = '[\._\-]\(src\|source\)$'
+    let target = shellescape(substitute(path_noExt, re, "", "") . ".min." . ext)
+    if filereadable(target) && !filewritable(target)
+        echohl WarningMsg
+        echo target . " is not writable."
+        echohl None
+        return
+    endif
+    let gcc = 'java -jar ' . g:closure_compiler_command . ' ' . ' --js ' . shellescape(path) . ' --js_output_file ' . target
     if has("win32") && v:lang == 'zh_CN.utf-8'
         let gcc = iconv(gcc, 'utf-8', 'gbk')
     endif
@@ -67,4 +81,5 @@ endfunction
 
 " set up auto commands
 "au FileType javascript nnoremap <silent> <leader>gcc :call ClosureCompiler()<cr>
+"autocmd FileWritePost,BufWritePost *.js :call ClosureCompiler()
 au FileType javascript command -nargs=0 Compiler :call ClosureCompiler()

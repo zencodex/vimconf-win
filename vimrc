@@ -589,7 +589,7 @@ map <C-S-kMinus> <C-w>_
 " @see http://www.zhuoqun.net/html/y2010/1516.html
 function! FileExplorer(path)
     if a:path == ""
-        if has("win")
+        if has("win32")
             let p = expand("%:p")
         elseif has("mac")
             let p = expand("%:p:h")
@@ -757,34 +757,6 @@ autocmd FileType velocity let b:match_words = '#if\>:#elseif\>:#else\>:#end\>'
         \ . ',#macro\>:#end\>'
 
 au BufReadCmd   *.epub      call zip#Browse(expand("<amatch>"))
-
-" Javascript & CSS Compress.
-function JS_CSS_Compress()
-    let cwd = expand('<afile>:p:h')
-    let nam = expand('<afile>:t:r')
-    let ext = expand('<afile>:e')
-    if -1 == match(nam, "[\._]src$")
-        let minfname = nam.".min.".ext
-    else
-        let minfname = substitute(nam, "[\._]src$", "", "g").".".ext
-    endif
-"    if ext == 'less'
-"        if executable('lessc')
-"            cal system( 'lessc '.cwd.'/'.nam.'.'.ext.' &')
-"        endif
-"    else
-        if filewritable(cwd.'/'.minfname)
-            if ext == 'js' && executable('closure-compiler')
-                cal system( 'closure-compiler --js '.cwd.'/'.nam.'.'.ext.' > '.cwd.'/'.minfname.' &')
-            elseif executable('yuicompressor')
-                cal system( 'yuicompressor '.cwd.'/'.nam.'.'.ext.' > '.cwd.'/'.minfname.' &')
-            endif
-        endif
-"    endif
-endfunction
-"autocmd FileWritePost,BufWritePost *.js :call Js_css_compress()
-"autocmd FileWritePost,BufWritePost *.css :call Js_css_compress()
-"autocmd FileWritePost,BufWritePost *.less :call Js_css_compress()
 
 
 " Processing
