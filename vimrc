@@ -340,6 +340,9 @@ set ignorecase
 set smartcase
 set number
 
+" fixed.
+set scrolloff=3
+
 if g:OS#gui
     set autochdir
     set colorcolumn=81
@@ -1021,8 +1024,10 @@ nmap <F3> :ToggleNERDTree<cr>
 " ctags
 if g:OS#win
     let g:ctags_path=$VIM.'\vimfiles\plugin\ctags.exe'
+	let g:tagbar_ctags_bin=$VIM.'\vimfiles\plugin\ctags.exe'
 else
     let g:ctags_path='~/.vim/plugin/ctags'
+	let g:tagbar_ctags_bin='~/.vim/plugin/ctags'
 endif
 let g:ctags_statusline=1
 let g:ctags_args=1
