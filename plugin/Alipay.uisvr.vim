@@ -68,32 +68,32 @@ function! s:uisvr(...)
 
     let paths = s:getPaths()
 
-    exec win . " " . fnamemodify(paths[targetType], ":p")
+    exec win . ' ' . fnamemodify(paths[targetType], ':p')
 endfunction
 
 function! s:getPaths()
-    let src_ext = expand("%:e")
-    let src_filename = expand("%:r")
-    let src_dir = expand("%:p:h")
-    let src_path = expand("%:p")
+    let src_ext = expand('%:e')
+    let src_filename = expand('%:r')
+    let src_dir = expand('%:p:h')
+    let src_path = expand('%:p')
     let uisvrDir = finddir('uisvr', expand('%:p:h').';')
     if "vm"==src_ext
-        let car = substitute(src_dir, '^.*' . s:sp . 'templates' . s:sp . '\([a-zA-Z0-9]\+\)' . s:sp . 'screen' . s:sp . '.*$', '\1', "")
-        let subpath = substitute(src_dir, '^.*' . s:sp . 'templates' . s:sp . car . s:sp . 'screen', '', "")
+        let car = substitute(src_dir, '^.*' . s:sp . 'templates' . s:sp . '\([a-zA-Z0-9]\+\)' . s:sp . 'screen' . s:sp . '.*$', '\1', '')
+        let subpath = substitute(src_dir, '^.*' . s:sp . 'templates' . s:sp . car . s:sp . 'screen', '', '')
     elseif "js"==src_ext || "css"==src_ext
-        let car = substitute(src_dir, '^.*' . s:sp . 'uisvr' . s:sp . '\([a-zA-Z0-9]\+\)\($\|' . s:sp . '.*$\)', '\1', "")
-        let subpath = substitute(src_dir, '^.*' . s:sp . 'uisvr' . s:sp . car, '\1', "")
+        let car = substitute(src_dir, '^.*' . s:sp . 'uisvr' . s:sp . '\([a-zA-Z0-9]\+\)\($\|' . s:sp . '.*$\)', '\1', '')
+        let subpath = substitute(src_dir, '^.*' . s:sp . 'uisvr' . s:sp . car, '\1', '')
     else
         return
     endif
-    let uisvrDir = fnamemodify(uisvrDir, ":p")
+    let uisvrDir = fnamemodify(uisvrDir, ':p')
     let path = {
-        \ "css" : uisvrDir . s:sp . car . subpath . s:sp . src_filename . ".css",
-        \ "js"  : uisvrDir . s:sp . car . subpath . s:sp . src_filename . ".js",
-        \ "vm"  : uisvrDir . s:sp . ".." . s:sp . "templates" . s:sp . car . s:sp . "screen" . subpath . s:sp . src_filename . ".vm",
-        \ "xml" : uisvrDir . s:sp . "config" . s:sp . "config.xml",
-        \ "js.vm" : uisvrDir . s:sp . "config" . s:sp . "js.vm",
-        \ "css.vm" : uisvrDir . s:sp . "config" . s:sp . "css.vm"
+        \ 'css' : uisvrDir . s:sp . car . subpath . s:sp . src_filename . '.css',
+        \ 'js'  : uisvrDir . s:sp . car . subpath . s:sp . src_filename . '.js',
+        \ 'vm'  : uisvrDir . s:sp . '..' . s:sp . 'templates' . s:sp . car . s:sp . 'screen' . subpath . s:sp . src_filename . '.vm',
+        \ 'xml' : uisvrDir . s:sp . 'config' . s:sp . 'config.xml',
+        \ 'js.vm' : uisvrDir . s:sp . 'config' . s:sp . 'js.vm',
+        \ 'css.vm' : uisvrDir . s:sp . 'config' . s:sp . 'css.vm'
         \ }
     return path
 endfunction
