@@ -120,7 +120,7 @@ set fileencodings=ucs-bom,utf-8,cp936,gb18030,big5,euc-jp,euc-kr,latin1
 set langmenu=zh_CN.utf-8
 source $VIMRUNTIME/delmenu.vim
 source $VIMRUNTIME/menu.vim
-language messages zh_cn.utf-8
+language messages zh_CN.UTF-8
 
 filetype plugin on
 filetype indent on
@@ -169,27 +169,41 @@ command -nargs=0 NoMax :call NoMaximumWindow()
 command -nargs=0 Nomax :call NoMaximumWindow()
 
 
+let s:fullscreen = 0
 function! FullScreenToggle()
     if g:OS#win
         if has("libcall")
             call libcallnr("gvimfullscreen.dll", "ToggleFullScreen", 0)
         endif
     elseif g:OS#mac
+        " 原生支持。
         if &fullscreen
             set nofullscreen
         else
             set fullscreen
         endif
+    elseif g:OS#unix
+        " 系统设置->键盘快捷键->窗口管理->切换全屏模式(F11)
+        if executable("wmctrl")
+            if s:fullscreen
+                " FIXME.
+                silent !wmctrl -r :ACTIVE: -b add,maximized_vert,maximized_horz
+                let s:fullscreen = 0
+            else
+                silent !wmctrl -r :ACTIVE: -b add,fullscreen
+                let s:fullscreen = 1
+            endif
+        endif
     endif
 endfunction
 command -nargs=0 FullScreen :call FullScreenToggle()
+nnoremap <F11> :call FullScreenToggle()<cr>
+inoremap <F11> <C-o><F11>
 
 if g:OS#win
     " max open window
     if g:OS#gui
         au GUIEnter * simalt ~x
-        nnoremap <F11> :call FullScreenToggle()<cr>
-        inoremap <F11> <C-o><F11>
     endif
 
     au! bufwritepost hosts silent !start cmd /C ipconfig /flushdns
@@ -201,12 +215,22 @@ else
         " <F11> is global hotkey for display desktop.
         nnoremap <C-F11> :call FullScreenToggle()<cr>
         inoremap <C-F11> <C-o>:call FullScreenToggle()<cr>
-        set transparency=5
+        if g:OS#mac
+            set transparency=5
+        elseif g:OS#unix
+            function! Maximize_Window()
+                " for Gnome.
+                " $ sudo apt-get install wmctrl
+                " http://fluxbox.sourceforge.net/docbook/zh_cn/html/ch03s05.html
+                silent !wmctrl -r :ACTIVE: -b add,maximized_vert,maximized_horz
+            endfunction
+            autocmd GUIEnter * call Maximize_Window()
+        endif
     endif
 
     command -nargs=0 Vimrc :silent! tabnew ~/.vim/vimrc
     " readonly.
-    command -nargs=0 Hosts :silent! tabnew /etc/hosts
+    command -nargs=0 Hosts :!sudo gvim /etc/hosts
 endif
 
 " theme, skin, color
@@ -265,8 +289,9 @@ if g:OS#win
     "set guifont=DajaVu:h11:cANSI
     "set guifont=Lucida\ Console:h11:cANSI
     "set guifontwide=YouYuan:h11:cGB2312
-elseif has("mac")
+elseif g:OS#mac
     set guifont=Courier_New:h16
+elseif g:OS#unix
 endif
 
 " auto mkview and loadview.
@@ -1048,7 +1073,7 @@ let tlist_html_settings = 'html;h:Headers;o:Objects(ID);c:Classes'
 let tlist_xhtml_settings = 'html;h:Headers;o:Objects(ID);c:Classes'
 let tlist_velocity_settings = 'html;h:Headers;o:Objects(ID);c:Classes'
 let tlist_css_settings = 'css;c:Classes;o:Objects(ID);t:Tags(Elements)'
-let tlist_javascript_settings = 'javascript;f:Functions;c:Classes;o:Objects'
+"let tlist_javascript_settings = 'javascript;f:Functions;c:Classes;o:Objects'
 
 
 " snipMate
