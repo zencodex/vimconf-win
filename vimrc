@@ -1050,9 +1050,10 @@ nmap <F3> :ToggleNERDTree<cr>
 if g:OS#win
     let g:ctags_path=$VIM.'\vimfiles\plugin\ctags.exe'
 	let g:tagbar_ctags_bin=$VIM.'\vimfiles\plugin\ctags.exe'
-else
+elseif g:OS#mac
     let g:ctags_path='~/.vim/plugin/ctags'
 	let g:tagbar_ctags_bin='~/.vim/plugin/ctags'
+else
 endif
 let g:ctags_statusline=1
 let g:ctags_args=1
