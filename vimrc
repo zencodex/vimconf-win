@@ -1078,7 +1078,7 @@ let tlist_html_settings = 'html;h:Headers;o:Objects(ID);c:Classes'
 let tlist_xhtml_settings = 'html;h:Headers;o:Objects(ID);c:Classes'
 let tlist_velocity_settings = 'html;h:Headers;o:Objects(ID);c:Classes'
 let tlist_css_settings = 'css;c:Classes;o:Objects(ID);t:Tags(Elements)'
-"let tlist_javascript_settings = 'javascript;f:Functions;c:Classes;o:Objects'
+let tlist_javascript_settings = 'javascript;f:Functions;c:Classes;o:Objects'
 
 
 " snipMate
