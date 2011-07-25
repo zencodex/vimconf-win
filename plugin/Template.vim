@@ -1,7 +1,7 @@
 " File: template.vim
 " Desption: autoload content from template file.
 " Author: 闲耘™(hotoo.cn[AT]gmail.com)
-" Last Change: 2010/11/25
+" Last Change: 2011/07/08
 
 if exists('loaded_smart_template')
     finish
@@ -95,6 +95,15 @@ function! LoadTemplate()
     return ''
 endfunction
 
+"if exists('g:smart_template_whitelist')
+    "if stridx(',' . g:smart_template_whitelist . ',', ',' . &ft . ',') == -1
+        "finish
+    "endif
+"elseif exists('g:smart_template_blacklist')
+    "if stridx(',' . g:smart_template_whitelist . ',', ',' . &ft . ',') > -1
+        "finish
+    "endif
+"endif
 if 0 != g:template_autoload
     autocmd! BufNewFile * silent! :call LoadTemplate()
 endif
