@@ -1021,25 +1021,19 @@ nmap <F3> :ToggleNERDTree<cr>
 "let javascript_enable_domhtmlcss=1
 
 
-" ctags
+" ctags, TagList, Tagbar.
+" @see http://easwy.com/blog/archives/advanced-vim-skills-taglist-plugin/
 if g:OS#win
     let g:ctags_path=$VIM.'\vimfiles\plugin\ctags.exe'
+    let Tlist_Ctags_Cmd=$VIM.'\vimfiles\plugin\ctags.exe'
 	let g:tagbar_ctags_bin=$VIM.'\vimfiles\plugin\ctags.exe'
 else
     let g:ctags_path='~/.vim/plugin/ctags'
+    let Tlist_Ctags_Cmd= '/usr/bin/ctags'
 	let g:tagbar_ctags_bin='~/.vim/plugin/ctags'
 endif
 let g:ctags_statusline=1
 let g:ctags_args=1
-
-
-" TagList
-" @see http://easwy.com/blog/archives/advanced-vim-skills-taglist-plugin/
-if g:OS#win
-    let Tlist_Ctags_Cmd=$VIM.'\vimfiles\plugin\ctags.exe'
-else
-    let Tlist_Ctags_Cmd= '/usr/bin/ctags'
-endif
 let g:Tlist_Use_Right_Window=1
 let g:Tlist_Show_One_File = 1
 let g:Tlist_Exit_OnlyWindow = 1
