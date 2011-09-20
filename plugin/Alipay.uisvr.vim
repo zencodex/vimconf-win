@@ -1,42 +1,58 @@
 " File: Alipay.uisvr.vim
 " Desption: uisvr 1.5 support for alipay sofaMVC.
-" @usage :Uisvr
-"        :Uisvr css
-"        :Uisvr js split
-"        :Uisvr vm
-"        :Uisvr xml    -> uisvr/config/config.xml
-"        :Uisvr css.vm -> uisvr/config/css.vm
-"        :Uisvr js.vm  -> uisvr/config/js.vm
+" @usage
+"        :Uisvr[ js|css|vm[ opening-window]]
+"        :Uisvr config[ xml|js|css[ opening-window]]
+"
+"        :Uisvr css             -> uisvr/{carName}/[path/to/]{fileName}.css
+"        :Uisvr js split        -> uisvr/{carName}/[path/to/]{fileName}.js
+"        :Uisvr vm tabnew       -> templates/{carName}/[path/to/]{fileName}.vm
+"        :Uisvr config          -> uisvr/config/config.xml
+"        :Uisvr xml             -> uisvr/config/config.xml
+"        :Uisvr config xml      -> uisvr/config/config.xml
+"        :Uisvr js.vm           -> uisvr/config/js.vm
+"        :Uisvr config js       -> uisvr/config/js.vm
+"        :Uisvr config js.vm    -> uisvr/config/js.vm
+"        :Uisvr config css      -> uisvr/config/css.vm
+"        :Uisvr config css.vm   -> uisvr/config/css.vm
+"        :Uisvr css.vm          -> uisvr/config/css.vm
+"
 " TODO: 已经打开的文件，不再新建窗口。
-" TODO: :Uisvr config[ xml|js|css]
-" TODO: 老版 uisvr 支持(maybe)。
 " Author: 闲耘™(hotoo.cn[AT]gmail.com)
-" Version: 1.6
-" Last Change: 2011/07/21
+" Version: 1.5
+" Last Change: 2011/09/20
 
 if exists('loaded_alipay_uisvr')
     finish
 endif
 let loaded_alipay_uisvr=1
 
-" default alipay uisvr path.
-if !exists('g:alipay_uisvr_path')
-    let g:alipay_uisvr_path = ''
+if !exists('g:uisvr_opening_window')
+    let g:uisvr_opening_window = "new"
 endif
 
-let s:sp = "/"
+let s:sp = '/'
 if has("win32") && exists("+shellslash") && !(&shellslash)
     let s:sp = '\\'
 endif
+
+function! s:warning(msg)
+    echohl WarningMsg
+    echo a:msg
+    echohl None
+endfunction
+function! s:error(msg)
+    echohl ErrorMsg
+    echo a:msg
+    echohl None
+endfunction
 
 " @param {String} filetype in [js, css, vm, xml]
 " @param {String} open buffer type, like [new, vsp, sp, tabnew, ...]
 function! s:uisvr(...)
     let ft = expand("%:e")
-    if "js"!=ft && "css"!=ft && "vm"!=ft
-        echohl WarningMsg
-        echo "请在 JavaScript, CSS 和 Velocity 文件下执行 :Uisvr 命令。"
-        echohl None
+    if "js"!=ft && "css"!=ft && "vm"!=ft && "xml"!=ft
+        call s:error("Not support this filetype.")
         return
     endif
     let fname = expand("%:r")
@@ -49,24 +65,60 @@ function! s:uisvr(...)
         elseif "vm"==ft
             let targetType = "js"
         endif
-        let win = "new"
+        let win = g:uisvr_opening_window
     elseif a:0 == 1
-        let targetType = a:1
-        let win = "new"
+        if "config" == a:1
+            let targetType = "xml"
+        else
+            let targetType = a:1
+        endif
+        let win = g:uisvr_opening_window
+    elseif a:0 == 2
+        if "config" == a:1
+            if "xml" == a:2
+                let targetType = "xml"
+            elseif "js" == a:2 || "js.vm" == a:2
+                let targetType = "js.vm"
+            elseif "css" == a:2 || "css.vm" == a:2
+                let targetType = "css.vm"
+            else
+                call s:warning(":help uisvr-usage")
+                return
+            endif
+            let win = g:uisvr_opening_window
+        elseif
+            let targetType = a:1
+            let win = a:2
+        endif
     else
-        let targetType = a:1
-        let win = a:2
+        if "config" == a:1
+            if "xml" == a:2
+                let targetType = "xml"
+            elseif "js" == a:2 || "js.vm" == a:2
+                let targetType = "js.vm"
+            elseif "css" == a:2 || "css.vm" == a:2
+                let targetType = "css.vm"
+            else
+                call s:warning(":help uisvr-usage")
+                return
+            endif
+            let win = a:3
+        elseif
+            call s:warning(":help uisvr-usage")
+            return
+        endif
     endif
 
     if "js"!=targetType && "css"!=targetType && "vm"!=targetType &&
             \ "xml"!=targetType && "css.vm"!=targetType && "js.vm"!=targetType
-        echohl WarningMsg
-        echo ":Uisvr [css|js|vm|xml|css.vm|js.vm] [new|vsp|tabnew|...]"
-        echohl None
+        call s:warning(":help uisvr-usage")
         return
     endif
 
     let paths = s:getPaths()
+    if(!paths || !paths[targetType])
+        return
+    endif
 
     exec win . ' ' . fnamemodify(paths[targetType], ':p')
 endfunction
@@ -77,14 +129,19 @@ function! s:getPaths()
     let src_dir = expand('%:p:h')
     let src_path = expand('%:p')
     let uisvrDir = finddir('uisvr', expand('%:p:h').';')
+    if uisvrDir == ""
+        call s:error("Not support this project.")
+        return ""
+    endif
     if "vm"==src_ext
-        let car = substitute(src_dir, '^.*' . s:sp . 'templates' . s:sp . '\([a-zA-Z0-9]\+\)' . s:sp . 'screen' . s:sp . '.*$', '\1', '')
+        let car = substitute(src_dir, '^.*' . s:sp . 'templates' . s:sp . '\([a-zA-Z0-9]\+\)' . s:sp . 'screen\($\|' . s:sp . '.*$\)', '\1', '')
         let subpath = substitute(src_dir, '^.*' . s:sp . 'templates' . s:sp . car . s:sp . 'screen', '', '')
     elseif "js"==src_ext || "css"==src_ext
         let car = substitute(src_dir, '^.*' . s:sp . 'uisvr' . s:sp . '\([a-zA-Z0-9]\+\)\($\|' . s:sp . '.*$\)', '\1', '')
         let subpath = substitute(src_dir, '^.*' . s:sp . 'uisvr' . s:sp . car, '\1', '')
     else
-        return
+        call s:error("Not support this filetype.")
+        return ""
     endif
     let uisvrDir = fnamemodify(uisvrDir, ':p')
     let path = {
