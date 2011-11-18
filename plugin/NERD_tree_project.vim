@@ -19,7 +19,7 @@
 "       map <F8> :ToggleNERDTree<CR>
 "
 " Customize:
-"   Make NERD_tree Project recognize more project, such as scons:
+"   Make NERD_tree Project to recognize more project, such as scons:
 "       let g:NTPNames = add(g:NTPNames, 'SConstruct')
 "   or add more file types:
 "       extend(g:NTPNames, ['*.sln', '*.csproj'])
@@ -68,19 +68,28 @@ let loaded_nerdtreeproject = 1
 
 " set default filename for local vimrc
 if !exists("g:NTPNames")
-  let g:NTPNames = ['build.xml', 'Makefile', '.project', '.lvimrc']
+  let g:NTPNames = ['build.xml', 'pom.xml', 'Makefile', '.project', '.lvimrc']
+endif
+if !exists("g:NTPNamesDirs")
+  let g:NTPNamesDirs = ['.git']
 endif
 
 "Function: s:loadLocalVimrc() {{{3
 "upwards search project file
 function! s:findProject()
+	for dirName in g:NTPNamesDirs
+		let file = finddir(dirName, expand("%:p:h") . ';')
+		if '' != file
+			return fnamemodify(file, ':p:h:h')
+		endif
+	endfor
 	for filename in g:NTPNames
 		let file = findfile(filename, expand("%:p:h") . ';')
 		if filereadable(file)
-			let b:ProjectRoot = fnamemodify(file, ':p:h')
-			break
+			return fnamemodify(file, ':p:h')
 		endif
 	endfor
+    return expand("%:p:h")
 endfunction
 
 "Function: s:toggle() {{{3
@@ -90,22 +99,24 @@ endfunction
 "name: the full path for the root node (is only used if the NERD tree is being
 "initialized.
 function! s:toggle(name)
-	let dir = expand("%:p:h")
 	let cmd = 'NERDTreeToggle '
+
+    if exists("t:NERDTreeBufName")
+        execute cmd
+        return
+    endif
+
 	if a:name !=# ''
 		" load the passed position
 		let cmd .= a:name
-	elseif exists('b:ProjectRoot') && stridx(dir, b:ProjectRoot, 0) == 0
-		" found in project directory
-		let cmd .= b:ProjectRoot
 	else
 		" then load current directory
-		let cmd .= dir
+		let cmd .= s:findProject()
 	endif
-	execute cmd
+    execute cmd
+    wincmd w
+    NERDTreeFind
 endfunction
 
 " create new command for this plugin
 command! -n=? -complete=dir -bar ToggleNERDTree :call s:toggle('<args>')
-" find project directory when creating or reading file
-autocmd BufNewFile,BufRead * call s:findProject()
