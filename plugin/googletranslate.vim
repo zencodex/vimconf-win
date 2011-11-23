@@ -27,6 +27,9 @@ let s:localMap = {
       \ 'zh-TW' : 'gbk',
       \ 'ja' : 'JIS'
       \}
+if !exists('g:googletranslate_completion')
+  let g:googletranslate_completion = ['en:zh-CN', 'zh-CN:en']
+endif
 
 function! s:getLocal()
   let k = g:googletranslate_locale
@@ -303,9 +306,22 @@ function! GoogleTranslateBalloon()
   let str = iconv(str, &encoding, s:getLocal())
   return text . "\n-------------------\n" . str
 endfunction
+" auto-completion languages pairs.
+function! s:SupportedLangs(ArgLead, CmdLine, CursorPos)
+  if a:ArgLead == ''
+    return join(g:googletranslate_completion, "\n")
+  endif
+  let a = []
+  for item in g:googletranslate_completion
+    if 0 == stridx(item, a:ArgLead)
+      call add(a, item)
+    endif
+  endfor
+  return join(a, "\n")
+endfunction
 
-command! -nargs=* -range GoogleTranslate <line1>,<line2>call GoogleTranslateRange(<f-args>)
-command! -nargs=* -range Trans <line1>,<line2>call GoogleTranslateRange(<f-args>)
+command! -nargs=* -complete=custom,s:SupportedLangs -range GoogleTranslate <line1>,<line2>call GoogleTranslateRange(<f-args>)
+command! -nargs=* -complete=custom,s:SupportedLangs -range Trans <line1>,<line2>call GoogleTranslateRange(<f-args>)
 command! -nargs=1 GoogleTranslateBalloon call GoogleTranslateBallooneval(<f-args>)
 command! -nargs=1 TransBalloon call GoogleTranslateBallooneval(<f-args>)
 vnoremap  <expr>  <leader>gt    <SID>TranslateVisualText()
