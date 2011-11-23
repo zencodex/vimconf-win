@@ -43,7 +43,7 @@ function! s:DoitGetTasks()
       vmap <buffer> q :<c-g><c-u>bw!<cr>
     else
       if winnr != winnr()
-	execute winnr.'wincmd w'
+	  execute winnr.'wincmd w'
       endif
     endif
     setlocal buftype=nofile bufhidden=hide noswapfile wrap ft=doit
