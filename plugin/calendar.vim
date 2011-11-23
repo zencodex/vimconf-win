@@ -69,10 +69,11 @@ exe "command! -nargs=* CalendarSearch vimgrep /<args>/".escape(g:calendar_diary,
 "endfunction
 autocmd filetype calendar nmap <buffer> <C-j> :call CalendarDiaryGoto("next")<cr>
 autocmd filetype calendar nmap <buffer> <C-k> :call CalendarDiaryGoto("prev")<cr>
+autocmd BufNewFile,BufRead *.cal nmap <buffer> <C-j> :call CalendarDiaryGoto("next")<cr>
+autocmd BufNewFile,BufRead *.cal nmap <buffer> <C-k> :call CalendarDiaryGoto("prev")<cr>
 
-function! s:CalendarDiaryGetDateByFileName()
-    let filepath = expand("%")
-    let matches = split(filepath, "[/\]")
+function! s:CalendarDiaryGetDateByFileName(filepath)
+    let matches = split(a:filepath, '[/\\]')
     let year = str2nr(matches[len(matches)-3])
     let month = str2nr(matches[len(matches)-2])
     let day = matches[len(matches)-1]
@@ -110,26 +111,27 @@ function! s:CalendarFixDate(year, month, day)
 endfunction
 function! CalendarDiaryGoto(...)
     let diary_path = finddir(g:calendar_diary)
+    let filepath = expand("%:p")
     if exists('+shellslash') && &shellslash
         let diary_path = substitute(diary_path, "\\", "/", "g")
     endif
 
     if a:1=="next"
-        if stridx(expand("%"), diary_path)!=0
+        if stridx(filepath, diary_path)!=0
             echo ""
             return
         endif
-        let date = s:CalendarDiaryGetDateByFileName()
+        let date = s:CalendarDiaryGetDateByFileName(filepath)
         let date = s:CalendarFixDate(date[0], date[1], date[2]+1)
         let year = date[0]
         let month = date[1]
         let day = date[2]
     elseif a:1=="prev"
-        if stridx(expand("%"), diary_path)!=0
+        if stridx(filepath, diary_path)!=0
             echo ""
             return
         endif
-        let date = s:CalendarDiaryGetDateByFileName()
+        let date = s:CalendarDiaryGetDateByFileName(filepath)
         let date = s:CalendarFixDate(date[0], date[1], date[2]-1)
         let year = date[0]
         let month = date[1]
@@ -1287,6 +1289,11 @@ function! s:CalendarHelp()
   call getchar()
   redraw!
 endfunction
+
+function! LunarCalenar()
+    return '农历：九月廿八，霜降'
+endfunction
+autocmd filetype calendar setl statusline=%!LunarCalenar()
 
 hi def link CalNavi     Search
 hi def link CalSaturday Statement
