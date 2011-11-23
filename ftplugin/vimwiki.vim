@@ -207,6 +207,15 @@ command! -buffer Vimwiki2HTMLBrowse
 command! -buffer VimwikiAll2HTML
       \ call vimwiki#html#WikiAll2HTML(expand(VimwikiGet('path_html')))
 
+function! s:explorer(...)
+  if a:0==1 && a:1 == "html"
+    call FileExplorer(expand(VimwikiGet("path_html")) . expand("%:r") . VimwikiGet("template_ext"))
+  else
+    call FileExplorer("")
+  endif
+endfunction
+command! -buffer -nargs=? Explorer call <SID>explorer(<f-args>)
+
 command! -buffer VimwikiNextLink call vimwiki#base#find_next_link()
 command! -buffer VimwikiPrevLink call vimwiki#base#find_prev_link()
 command! -buffer VimwikiDeleteLink call vimwiki#base#delete_link()
