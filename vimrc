@@ -105,6 +105,14 @@ else
     map <buffer> <F8> :cn<cr>
 endif
 
+"cnoremap js javascript
+"cnoremap vm velocity
+"cabbrev js javascript
+"cabbrev vm velocity
+"cabbrev utf set fenc=utf8
+"cabbrev utf8 set fenc=utf8
+"cabbrev gbk set fenc=gbk
+
 " }}}
 
 " -------------------------------- Settings ----------------------------- {{{
@@ -207,9 +215,10 @@ if g:OS#win
     endif
 
     au! bufwritepost hosts silent !start cmd /C ipconfig /flushdns
-    command -nargs=0 Vimrc :silent! tabnew $VIM/vimfiles/vimrc
+    command -nargs=0 Vimrc silent tabnew $VIM/vimfiles/vimrc
+    command -nargs=0 Sysrc silent tabnew $VIM/sysrc.vim
     " @see http://practice.chatserve.com/hosts.html
-    command -nargs=0 Hosts :silent! tabnew c:\windows\system32\drivers\etc\hosts
+    command -nargs=0 Hosts silent tabnew c:\windows\system32\drivers\etc\hosts
 else
     if g:OS#gui
         " <F11> is global hotkey for display desktop.
@@ -229,6 +238,7 @@ else
     endif
 
     command -nargs=0 Vimrc :silent! tabnew ~/.vim/vimrc
+    command -nargs=0 Sysrc :silent! tabnew ~/.sysrc
     " readonly.
     command -nargs=0 Hosts :!sudo gvim /etc/hosts
 endif
@@ -242,6 +252,8 @@ if g:OS#gui
     "colo colorzone
     "colo fu
     colo hotoo_manuscript
+    "colo default
+    "colo emacs
     "colo stackoverflow
     "colo newspaper
     "colo wombat
@@ -296,10 +308,8 @@ endif
 
 " auto mkview and loadview.
 if !&diff
-    au BufWinLeave *.js mkview
-    au BufWinEnter *.js silent loadview
-    au BufWinLeave *.css mkview
-    au BufWinEnter *.css silent loadview
+    au BufWinLeave *.js,*.css silent mkview
+    au BufWinEnter *.js,*.css silent loadview
 endif
 
 
@@ -348,6 +358,7 @@ set expandtab       " replace tab to whitespace.
 set tabstop=4       " show tab indent word space.
 set shiftwidth=4    " tab length
 
+"autocmd FileType html,xhtml,velocity setl softtabstop=2 | setl tabstop=2 | setl shiftwidth=2
 
 set linebreak       " break full word.
 set autoindent      " new line indent same this line.
@@ -373,7 +384,6 @@ if g:OS#gui
     set colorcolumn=81
 endif
 
-hi ColorColumn guibg=#444444
 " for Vim72-
 "syn match out80 /\%80v./ containedin=ALL
 "hi out80 guifg=#333333 guibg=#ffffff
@@ -383,16 +393,6 @@ hi ColorColumn guibg=#444444
 set ambiwidth=double
 
 
-" 高亮当前行
-" highlight CurrentLine guibg=darkgrey guifg=white
-" au! Cursorhold * exe 'match CurrentLine /\%' . line('.') . 'l.*/'
-" set ut=100
-"
-" set cursorcolumn
-set cursorline
-if g:OS#win
-    hi cursorline gui=underline guibg=NONE cterm=underline
-endif
 
 set history=500
 
@@ -437,9 +437,6 @@ command -nargs=0 LastModify :call GetFileTime()
 set laststatus=2
 set statusline=%t\ %1*%m%*\ %1*%r%*\ %2*%h%*%w%=%l%3*/%L(%p%%)%*,%c%V]\ [%b:0x%B]\ [%{&ft==''?'TEXT':toupper(&ft)},%{toupper(&ff)},%{toupper(&fenc!=''?&fenc:&enc)}%{&bomb?',BOM':''}%{&eol?'':',NOEOL'}]
 "let &statusline=' %t %{&mod?(&ro?"*":"+"):(&ro?"=":" ")} %1*|%* %{&ft==""?"any":&ft} %1*|%* %{&ff} %1*|%* %{(&fenc=="")?&enc:&fenc}%{(&bomb?",BOM":"")} %1*|%* %=%1*|%* 0x%B %1*|%* (%l,%c%V) %1*|%* %L %1*|%* %P'
-hi User1 guibg=red guifg=yellow
-hi User2 guibg=#008000 guifg=white
-hi User3 guibg=#C2BFA5 guifg=#999999
 "hi User1 cterm=italic ctermfg=blue
 "hi User2 cterm=bold
 
@@ -656,7 +653,6 @@ endfunction
 "                                      %:p:h     " Just Fold Name.
 nmap <F6> :call FileExplorer("")<cr>
 imap <F6> <C-o><F6>
-command -nargs=0 Explor :call FileExplorer("")
 command -nargs=0 Explorer :call FileExplorer("")
 
 let g:use_bash="zsh"
@@ -780,9 +776,9 @@ autocmd FileType mxml,actionscript nmap <buffer> <F10> :w<cr>:setlocal makeprg=m
 
 autocmd FileType css syn region foldBraces start=/{/ end=/}/ transparent fold keepend extend
 
-autocmd FileType velocity let b:match_words = '#if\>:#elseif\>:#else\>:#end\>'
-		\ . ',#foreach\>:#end\>'
-        \ . ',#macro\>:#end\>'
+"autocmd FileType velocity let b:match_words = '#if\>:#elseif\>:#else\>:#end\>'
+		"\ . ',#foreach\>:#end\>'
+        "\ . ',#macro\>:#end\>'
 
 au BufReadCmd   *.epub      call zip#Browse(expand("<amatch>"))
 
@@ -948,8 +944,12 @@ let g:vimwiki_camel_case = 0
 let g:vimwiki_CJK_length = 1
 let g:vimwiki_use_calendar = 0
 let g:vimwiki_timestamp_format='%Y年%m月%d日 %H:%M:%S'
-let g:vimwiki_user_html_list = "search.html,404.html"
+let g:vimwiki_user_htmls = "search.html,404.html"
 
+
+
+" autocomplpop.vim, acp.vim
+"let g:loaded_acp = 0
 " Auto Complete Pop Menu
 " autocomplpop.vim
 " @see http://www.vim.org/scripts/script.php?script_id=1879
@@ -981,8 +981,8 @@ endif
 "autocmd FileType php set omnifunc=phpcomplete#CompletePHP
 "autocmd FileType velocity set omnifunc=velocitycomplete#CompleteTags
 
-autocmd FileType javascript set dictionary=$VIM/vimfiles/dict/javascript.dict,$VIM/vimfiles/dict/jQuery.dict,$VIM/vimfiles/dict/jQuery.dict
-"autocmd FileType javascript set omnifunc=javascriptcomplete#CompleteJS
+autocmd FileType javascript setl dictionary=$VIM/vimfiles/dict/javascript.dict,$VIM/vimfiles/dict/jQuery.dict,$VIM/vimfiles/dict/jQuery.dict
+"autocmd FileType javascript setl omnifunc=javascriptcomplete#CompleteJS
 
 
 " Doxygen
@@ -1096,7 +1096,9 @@ else
     au BufNewFile,BufRead *.xml,*.htm,*.html,*.vm,*.php,*.jsp so ~/.vim/ftplugin/xml/xml_fold.vim
 endif
 
-au BufNewFile,BufRead *.vm setl fenc=gbk
+
+" velocity default encoding setting.
+"au BufNewFile,BufRead *.vm setl fenc=gbk
 
 " }}}
 
@@ -1114,6 +1116,11 @@ function! RemoveTrailingWhitespace()
     endif
 endfunction
 autocmd BufWritePre * call RemoveTrailingWhitespace()
+
+highlight TabSpace ctermbg=green guibg=green
+syntax match TabSpace /\t/
+highlight WhitespaceEOL ctermbg=yellow guibg=yellow
+syntax match WhitespaceEOL /\s\+$/
 
 
 " get week day string in chinese.
@@ -1161,5 +1168,7 @@ else
     let helptags='~/.vim/doc'
 endif
 set helplang=cn
+
+let g:uisvr_opening_window = "tabnew"
 
 " vim:fdm=marker
