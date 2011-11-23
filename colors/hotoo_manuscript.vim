@@ -189,5 +189,23 @@ hi diffChange   guifg=bg      guibg=#a08080 gui=none
 hi diffText     guifg=bg      guibg=#a05c5c gui=none
 "}}}
 
+" 高亮当前行
+" highlight CurrentLine guibg=darkgrey guifg=white
+" au! Cursorhold * exe 'match CurrentLine /\%' . line('.') . 'l.*/'
+" set ut=100
+"
+" set cursorcolumn
+set cursorline
+if has("win32") || has("win32unix")
+    hi cursorline gui=underline guibg=NONE cterm=underline
+endif
+
+" statusline
+hi User1 guibg=red guifg=yellow
+hi User2 guibg=#008000 guifg=white
+hi User3 guibg=#C2BFA5 guifg=#999999
+
+hi ColorColumn guibg=#444444
+
 
 "vim: sw=4
