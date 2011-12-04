@@ -1067,6 +1067,7 @@ let g:Tlist_WinWidth=25
 nnoremap <F12> :TlistToggle<CR>
 
 let tlist_vimwiki_settings = 'wiki;h:Headers'
+let tlist_confluencewiki_settings = 'confluencewiki;h:Headers'
 let tlist_markdown_settings = 'markdown;h:Headers'
 let tlist_textile_settings = 'textile;h:Headers'
 let tlist_html_settings = 'html;h:Headers;o:Objects(ID);c:Classes'
