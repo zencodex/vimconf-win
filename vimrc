@@ -1100,6 +1100,7 @@ endif
 
 " velocity default encoding setting.
 "au BufNewFile,BufRead *.vm setl fenc=gbk
+au BufRead,BufNewFile *.vm set ft=html fileencoding=gbk syntax=velocity
 
 " }}}
 
