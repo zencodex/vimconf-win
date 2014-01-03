@@ -135,6 +135,8 @@ filetype indent on
 syntax on
 filetype on
 
+execute pathogen#infect()
+set runtimepath^=$VIM.'\vimfiles\bundle\ctrlp.vim'
 
 " FencView.vim
 " 自动识别文件编码
@@ -293,8 +295,8 @@ endif
 " @see http://www.gracecode.com/archives/1545/
 " @see http://blog.xianyun.org/2009/09/14/vim-fonts.html
 if g:OS#win
-    set guifont=Courier_New:h12:cANSI
-    "set guifont=Microsoft_YaHei_Mono:h11:cANSI
+    "set guifont=Courier_New:h12:cANSI
+    set guifont=YaHei_Consolas_Hybrid:h12:cGB2312
 
     "set guifont=monaco:h11:cANSI
     "set guifont=Consola:h11:cANSI
@@ -354,7 +356,7 @@ endif
 
 " Tabs
 set softtabstop=4
-set expandtab       " replace tab to whitespace.
+"set expandtab       " replace tab to whitespace.
 set tabstop=4       " show tab indent word space.
 set shiftwidth=4    " tab length
 
@@ -990,9 +992,9 @@ autocmd FileType javascript setl dictionary=$VIM/vimfiles/dict/javascript.dict,$
 " @see http://www.vim.org/scripts/script.php?script_id=987
 " @see http://www.jeffhung.net/blog/articles/jeffhung/447/
 " @see http://blog.csdn.net/AD_LI/archive/2009/08/24/4474878.aspx
-let g:DoxygenToolkit_authorName="闲耘™ (@hotoo, mail@xianyun.org)"
+let g:DoxygenToolkit_authorName="Qisen (@Qisen, cto@phoneos.org)"
 let s:licenseTag = "Copyleft(C)\<enter>"
-let s:licenseTag = s:licenseTag . "For 闲耘™\<enter>"
+let s:licenseTag = s:licenseTag . "for PhoneOS.Org™\<enter>"
 let s:licenseTag = s:licenseTag . "Some right reserved\<enter>"
 let g:DoxygenToolkit_licenseTag = s:licenseTag
 let g:DoxygenToolkit_briefTag_funcName="yes"
@@ -1082,10 +1084,10 @@ let tlist_javascript_settings = 'javascript;f:Functions;c:Classes;o:Objects'
 " @see http://www.vim.org/scripts/script.php?script_id=2540
 " @see http://code.google.com/p/snipmate/
 " @see http://vimeo.com/3535418
-let snips_author="闲耘™ (hotoo.cn[AT]gmail.com)"
+let snips_author="PhoneOS™ (cto[AT]phoneos.org)"
 
 " for smart template.vim
-let g:template_author = '闲耘™ (hotoo.cn[AT]gmail.com)'
+let g:template_author = 'PhoneOS™ (cto[AT]phoneos.org)'
 
 " }}}
 
@@ -1097,6 +1099,9 @@ else
     au BufNewFile,BufRead *.xml,*.htm,*.html,*.vm,*.php,*.jsp so ~/.vim/ftplugin/xml/xml_fold.vim
 endif
 
+let g:nclipper_nomap = 1
+vmap <space>y <Plug>(nclipper)
+vmap <space>Y <Plug>(nclipper-with-filename)
 
 " velocity default encoding setting.
 "au BufNewFile,BufRead *.vm setl fenc=gbk
