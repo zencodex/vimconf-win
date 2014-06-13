@@ -39,6 +39,17 @@ else
 endif
 
 set nocompatible
+filetype off                  " required!
+set rtp+=$VIM/vimfiles/bundle/vundle/
+call vundle#rc('$VIM/vimfiles/bundle/')
+Bundle 'gmarik/vundle'
+Bundle 'kien/ctrlp.vim'
+Bundle 'tpope/vim-surround'
+Bundle 'mileszs/ack.vim'
+Bundle 'xolox/vim-misc'
+
+let mapleader = ','
+
 if g:OS#win
     source $VIMRUNTIME/vimrc_example.vim
     source $VIMRUNTIME/mswin.vim
@@ -121,10 +132,10 @@ set shortmess=atI
 
 " encoding
 set encoding=utf-8
-set termencoding=utf-8
+set termencoding=cp936,utf-8
 set fileencoding=utf-8
 "set fileencodings=ucs-bom,utf-8,chinese,latin-1
-set fileencodings=ucs-bom,utf-8,cp936,gb18030,big5,euc-jp,euc-kr,latin1
+set fileencodings=ucs-bom,utf-8,chinese,cp936,gb18030,big5,euc-jp,euc-kr,latin1
 set langmenu=zh_CN.utf-8
 source $VIMRUNTIME/delmenu.vim
 source $VIMRUNTIME/menu.vim
@@ -134,9 +145,6 @@ filetype plugin on
 filetype indent on
 syntax on
 filetype on
-
-execute pathogen#infect()
-set runtimepath^=$VIM.'\vimfiles\bundle\ctrlp.vim'
 
 " FencView.vim
 " 自动识别文件编码
@@ -1179,3 +1187,10 @@ set helplang=cn
 let g:uisvr_opening_window = "tabnew"
 
 " vim:fdm=marker
+
+let g:escape_vim_regex = '^$/\'
+noremap > :cnext<cr>
+noremap < :cprevious<cr>
+
+" nnoremap <leader>g :call lib#edit#grep_cursor_word()<cr>
+" vnoremap <leader>g :call lib#edit#grep_selection()<cr>'
