@@ -304,7 +304,7 @@ endif
 " @see http://blog.xianyun.org/2009/09/14/vim-fonts.html
 if g:OS#win
     "set guifont=Courier_New:h12:cANSI
-    set guifont=YaHei_Consolas_Hybrid:h12:cGB2312
+    set guifont=YaHei_Consolas_Hybrid:h10:cGB2312
 
     "set guifont=monaco:h11:cANSI
     "set guifont=Consola:h11:cANSI
